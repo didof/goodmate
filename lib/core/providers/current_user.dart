@@ -17,10 +17,11 @@ class CurrentUser with ChangeNotifier {
   void updateCurrentUser(User user, [bool silently = true]) {
     uid = user.uid;
     email = user.email;
-    displayName = user.displayName.isEmpty
+    displayName = user.displayName == ''
         ? user.email.selectStrBefore('@').capitalizeFirstLetter()
         : user.displayName;
     if (!silently) notifyListeners();
+    print(uid);
   }
 
   void updateTheme(String themeChoice) {

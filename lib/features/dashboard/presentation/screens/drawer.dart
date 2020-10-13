@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/providers/current_user.dart';
 import 'package:flutter_architecture_scaffold/core/utils/navigateTo.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/profile_section.dart/profile_section.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/profile_section/profile_section.dart';
 import 'package:provider/provider.dart';
 
 class DashboardDrawer extends StatelessWidget {

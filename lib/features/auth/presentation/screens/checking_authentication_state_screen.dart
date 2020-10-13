@@ -9,8 +9,8 @@ class CheckingAuthenticationStateScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            Text('Checking if already logged in ...'),
             LinearProgressIndicator(),
+            Text('Checking if already logged in ...'),
           ],
         ),
       ),

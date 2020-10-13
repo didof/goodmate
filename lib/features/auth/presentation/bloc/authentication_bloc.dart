@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
-import 'package:flutter_architecture_scaffold/core/usecases/params.dart';
+import 'package:flutter_architecture_scaffold/core/entities/params.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/usecases/use_create_user_with_email_and_password.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/usecases/use_sign_in_user_with_email_and_password.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/usecases/use_sign_out.dart';
@@ -67,8 +67,7 @@ class AuthenticationBloc
       });
     } else if (event is TriggerSignout) {
       yield AuthenticationWaiting();
-      await useSignOut(NoParams());
-      yield AuthenticationInitial();
+      await useSignOut();
     }
   }
 }

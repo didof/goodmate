@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/utils/buildSnackbar.dart';
 import 'package:flutter_architecture_scaffold/core/utils/navigateTo.dart';
-import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_bloc_provider_wrapper.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_wrapper.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/credentials_controller.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signup_screen.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
@@ -16,32 +16,34 @@ class SigninScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AuthenticationBlocProviderWrapper(
       builder: (context) => Scaffold(
-        body: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-          listener: (BuildContext context, AuthenticationState state) {
-            switch (state.runtimeType) {
-              case AuthenticationError:
-                buildErrorSnackbarFromAuthenticationErrorState(
-                  context: context,
-                  state: state,
-                  destinationScreen: SignupScreen(),
-                );
-                break;
-              case AuthenticationSuccess:
-                replaceTo(context, screen: DashboardScreen());
-            }
-          },
-          builder: (BuildContext context, AuthenticationState state) {
-            switch (state.runtimeType) {
-              case AuthenticationWaiting:
-                return Center(child: CircularProgressIndicator());
-              case AuthenticationSuccess:
-                return _Successful();
-              case AuthenticationInitial:
-              case AuthenticationError:
-              default:
-                return _Initial();
-            }
-          },
+        body: SafeArea(
+          child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+            listener: (BuildContext context, AuthenticationState state) {
+              switch (state.runtimeType) {
+                case AuthenticationError:
+                  buildErrorSnackbarFromAuthenticationErrorState(
+                    context: context,
+                    state: state,
+                    destinationScreen: SignupScreen(),
+                  );
+                  break;
+                case AuthenticationSuccess:
+                  replaceTo(context, screen: DashboardScreen());
+              }
+            },
+            builder: (BuildContext context, AuthenticationState state) {
+              switch (state.runtimeType) {
+                case AuthenticationWaiting:
+                  return Center(child: CircularProgressIndicator());
+                case AuthenticationSuccess:
+                  return _Successful();
+                case AuthenticationInitial:
+                case AuthenticationError:
+                default:
+                  return _Initial();
+              }
+            },
+          ),
         ),
       ),
     );
@@ -67,29 +69,33 @@ class _Initial extends StatelessWidget {
     return Center(
       child: Form(
         key: _formKey,
-        child: Column(
-          children: [
-            TextFormField(
-              decoration: InputDecoration(labelText: 'e-mail'),
-              controller: _credentialsController.email,
-            ),
-            TextFormField(
-              decoration: InputDecoration(labelText: 'password'),
-              controller: _credentialsController.password,
-            ),
-            FlatButton.icon(
-              icon: Icon(Icons.accessibility_new),
-              label: Text('Sign in'),
-              onPressed: () => _dispatchSignInEvent(context),
-            ),
-            FlatButton(
-              child: Text('I need to create an account'),
-              onPressed: () => replaceTo(
-                context,
-                screen: SignupScreen(),
+        child: Padding(
+          padding: const EdgeInsets.all(32.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextFormField(
+                decoration: InputDecoration(labelText: 'e-mail'),
+                controller: _credentialsController.email,
               ),
-            )
-          ],
+              TextFormField(
+                decoration: InputDecoration(labelText: 'password'),
+                controller: _credentialsController.password,
+              ),
+              FlatButton.icon(
+                icon: Icon(Icons.accessibility_new),
+                label: Text('Sign in'),
+                onPressed: () => _dispatchSignInEvent(context),
+              ),
+              FlatButton(
+                child: Text('I need to create an account'),
+                onPressed: () => replaceTo(
+                  context,
+                  screen: SignupScreen(),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -101,12 +107,15 @@ class _Successful extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        LinearProgressIndicator(),
-        Text('Successfully authenticated. You are being redirected.'),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(32.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          LinearProgressIndicator(),
+          Text('Successfully authenticated. You are being redirected.'),
+        ],
+      ),
     );
   }
 }

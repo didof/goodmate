@@ -34,3 +34,11 @@ class NetworkFailure extends Failure {
   final String message;
   NetworkFailure({@required this.code, @required this.message});
 }
+
+abstract class CloudFailure implements Failure {}
+
+class RetrieveUserFailure extends CloudFailure {
+  final String code;
+  final String message;
+  RetrieveUserFailure({@required this.code, @required this.message});
+}

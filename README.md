@@ -13,3 +13,7 @@ With the use of [data_connection_checker](https://pub.dev/packages/data_connecti
 
 ### Sections
 - Profile
+- First access section UI
+
+##### TODO
+- Fix signout not working anymore (maybe using get_it)

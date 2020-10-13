@@ -1,13 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/providers/current_user.dart';
+import 'package:flutter_architecture_scaffold/core/providers/instances.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/checking_authentication_state_screen.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signup_screen.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/screen.dart';
 import 'package:provider/provider.dart';
-
-import 'features/auth/presentation/screens/authentication_bloc_provider_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,28 +21,35 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<CurrentUser>(create: (_) => CurrentUser()),
-      ],
-      builder: (context, child) => MaterialApp(
-        title: 'GoodMate',
-        debugShowCheckedModeBanner: false,
-        home: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return CheckingAuthenticationStateScreen();
-            }
-            if (snapshot.connectionState == ConnectionState.active) {
-              if (snapshot.hasData) {
-                Provider.of<CurrentUser>(context)
-                    .updateCurrentUser(snapshot.data);
-                return DashboardScreen();
-              } else {
-                return SignupScreen();
-              }
-            }
-          },
+        ChangeNotifierProvider<Instances>(
+          create: (_) => Instances(
+            firebaseAuth: FirebaseAuth.instance,
+            firebaseFirestore: FirebaseFirestore.instance,
+          ),
         ),
-      ),
+      ],
+      builder: (context, child) {
+        final instances = Provider.of<Instances>(context, listen: false);
+        return MaterialApp(
+          title: 'GoodMate',
+          debugShowCheckedModeBanner: false,
+          home: StreamBuilder(
+            stream: instances.firebaseAuth.authStateChanges(),
+            builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+              print('changed $snapshot');
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CheckingAuthenticationStateScreen();
+              }
+              if (snapshot.connectionState == ConnectionState.active) {
+                if (snapshot.hasData) {
+                  return DashboardScreen();
+                }
+              }
+              return SignupScreen();
+            },
+          ),
+        );
+      },
     );
   }
 }

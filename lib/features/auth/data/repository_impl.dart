@@ -4,8 +4,8 @@ import 'package:meta/meta.dart';
 
 import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
 import 'package:flutter_architecture_scaffold/core/network/network_info.dart';
-import 'package:flutter_architecture_scaffold/features/auth/data/datasources/authentication_datasource_remote.dart';
-import 'package:flutter_architecture_scaffold/features/auth/domain/repositories/authentication_repository_contract.dart';
+import 'package:flutter_architecture_scaffold/features/auth/data/datasource.dart';
+import 'package:flutter_architecture_scaffold/features/auth/domain/authentication_repository_contract.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepositoryContract {
   final AuthenticationDatasourceRemote datasource;
@@ -78,7 +78,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepositoryContract {
   }
 
   @override
-  Future<Either<SignOutUserFailure, void>> signOut() async {
+  Future<void> signOut() async {
     return await datasource.signOut();
   }
 }
