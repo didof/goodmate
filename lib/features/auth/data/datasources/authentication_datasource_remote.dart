@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_architecture_scaffold/core/failures.dart';
+import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
 import 'package:meta/meta.dart';
 
 import 'package:flutter_architecture_scaffold/features/auth/data/datasources/authentication_datasource_contract.dart';

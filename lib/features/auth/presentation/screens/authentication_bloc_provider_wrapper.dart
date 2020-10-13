@@ -1,5 +1,7 @@
+import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_architecture_scaffold/core/network/network_info.dart';
 import 'package:flutter_architecture_scaffold/features/auth/data/datasources/authentication_datasource_remote.dart';
 import 'package:flutter_architecture_scaffold/features/auth/data/repositories/authentication_impl.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/usecases/use_create_user_with_email_and_password.dart';
@@ -19,6 +21,9 @@ class AuthenticationBlocProviderWrapper extends StatelessWidget {
   }) : super(key: key);
 
   final nested = AuthenticationRepositoryImpl(
+    networkInfoImpl: NetworkInfoImpl(
+      dataConnectionChecker: DataConnectionChecker(),
+    ),
     datasource: AuthenticationDatasourceRemote(
       firebaseAuthInstance: FirebaseAuth.instance,
     ),

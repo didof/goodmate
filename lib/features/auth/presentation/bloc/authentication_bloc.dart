@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter_architecture_scaffold/core/failures.dart';
+import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
 import 'package:flutter_architecture_scaffold/core/usecases/params.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/usecases/use_create_user_with_email_and_password.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/usecases/use_sign_in_user_with_email_and_password.dart';
@@ -33,7 +33,7 @@ class AuthenticationBloc
     yield AuthenticationInitial();
     if (event is TriggerCreateUserWithEmailAndPassword) {
       yield AuthenticationWaiting();
-      final Either<CreateUserFailure, UserCredential> user =
+      final Either<Failure, UserCredential> user =
           await useCreateUserWithEmailAndPassword(
         CreateUserWithEmailAndPasswordParams(
           email: event.email,
@@ -50,7 +50,7 @@ class AuthenticationBloc
       });
     } else if (event is TriggerSignInUserWithEmailAndPassword) {
       yield AuthenticationWaiting();
-      final Either<SignInUserFailure, UserCredential> user =
+      final Either<Failure, UserCredential> user =
           await useSignInUserWithEmailAndPassword(
         SignInUserWithEmailAndPasswordParams(
           email: event.email,

@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_architecture_scaffold/core/failures.dart';
+import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
 import 'package:flutter_architecture_scaffold/core/usecases/params.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/repositories/authentication_repository_contract.dart';
 import 'package:meta/meta.dart';

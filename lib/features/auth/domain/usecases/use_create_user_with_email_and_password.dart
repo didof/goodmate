@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_architecture_scaffold/core/usecases/params.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/repositories/authentication_repository_contract.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter_architecture_scaffold/core/failures.dart';
+import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
 import 'package:flutter_architecture_scaffold/core/usecases/usecases_contract.dart';
 
 class UseCreateUserWithEmailAndPassword
@@ -13,7 +13,7 @@ class UseCreateUserWithEmailAndPassword
   UseCreateUserWithEmailAndPassword({@required this.repository});
 
   @override
-  Future<Either<CreateUserFailure, UserCredential>> call(
+  Future<Either<Failure, UserCredential>> call(
     CreateUserWithEmailAndPasswordParams paramsCredentials,
   ) async {
     return await repository.createUserWithEmailAndPassword(
