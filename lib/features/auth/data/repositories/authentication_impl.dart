@@ -26,7 +26,10 @@ class AuthenticationRepositoryImpl extends AuthenticationRepositoryContract {
       );
       return Right(userCredential);
     } on FirebaseAuthException catch (e) {
-      return Left(CreateUserFailure(message: e.message));
+      return Left(CreateUserFailure(
+        code: e.code,
+        message: e.message,
+      ));
     } catch (e) {
       print(
           '[Authentiation_impl:createUserWithEmailAndPassword] unimplementedError: $e');
@@ -47,11 +50,19 @@ class AuthenticationRepositoryImpl extends AuthenticationRepositoryContract {
       );
       return Right(userCredential);
     } on FirebaseAuthException catch (e) {
-      return Left(SignInUserFailure(message: e.message));
+      return Left(SignInUserFailure(
+        code: e.code,
+        message: e.message,
+      ));
     } catch (e) {
       print(
           '[Authentiation_impl:signInUserWithEmailAndPassword] unimplementedError: $e');
       throw UnimplementedError();
     }
+  }
+
+  @override
+  Future<Either<SignOutUserFailure, void>> signOut() async {
+    return await datasource.signOut();
   }
 }

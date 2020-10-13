@@ -13,7 +13,7 @@ class UseSignInUserWithEmailAndPassword
   UseSignInUserWithEmailAndPassword({@required this.repository});
 
   @override
-  Future<Either<Failure, UserCredential>> call(
+  Future<Either<SignInUserFailure, UserCredential>> call(
     SignInUserWithEmailAndPasswordParams paramsCredentials,
   ) async {
     return await repository.signInWithEmailAndPassword(

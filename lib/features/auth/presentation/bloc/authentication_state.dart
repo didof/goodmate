@@ -8,8 +8,12 @@ class AuthenticationInitial extends AuthenticationState {}
 class AuthenticationWaiting extends AuthenticationState {}
 
 class AuthenticationError extends AuthenticationState {
+  final String code;
   final String message;
-  AuthenticationError({@required this.message});
+  AuthenticationError({
+    @required this.code,
+    @required this.message,
+  });
 }
 
 class AuthenticationSuccess extends AuthenticationState {

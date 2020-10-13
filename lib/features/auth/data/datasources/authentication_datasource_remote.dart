@@ -1,4 +1,6 @@
+import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_architecture_scaffold/core/failures.dart';
 import 'package:meta/meta.dart';
 
 import 'package:flutter_architecture_scaffold/features/auth/data/datasources/authentication_datasource_contract.dart';
@@ -27,5 +29,11 @@ class AuthenticationDatasourceRemote extends AuthenticationDatasource {
       email: email,
       password: password,
     );
+  }
+
+  @override
+  Future<Either<SignOutUserFailure, void>> signOut() async {
+    final result = await firebaseAuthInstance.signOut();
+    return Right(result);
   }
 }

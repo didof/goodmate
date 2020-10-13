@@ -11,4 +11,6 @@ abstract class AuthenticationDatasource {
     @required String email,
     @required String password,
   });
+
+  Future<void> signOut();
 }

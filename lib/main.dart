@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_screen.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/checking_authentication_state_screen.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signup_screen.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/dashboard_screen.dart';
+
+import 'features/auth/presentation/screens/authentication_bloc_provider_wrapper.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +31,7 @@ class App extends StatelessWidget {
               // TODO save user in provider
               return DashboardScreen();
             } else {
-              return AuthenticationScreen();
+              return SignupScreen();
             }
           }
         },
