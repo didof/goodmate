@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/utils/redirectTo.dart';
+import 'package:flutter_architecture_scaffold/core/utils/buildSnackbar.dart';
+import 'package:flutter_architecture_scaffold/core/utils/navigateTo.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_bloc_provider_wrapper.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/credentials_controller.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signin_screen.dart';
@@ -11,32 +12,6 @@ import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/au
 class SignupScreen extends StatelessWidget {
   SignupScreen({Key key}) : super(key: key);
 
-  _buildErrorSnackbar({
-    @required BuildContext context,
-    @required AuthenticationError state,
-  }) {
-    final ScaffoldState scaffoldState = Scaffold.of(context);
-    SnackBar snackbar = SnackBar(content: Text(state.message));
-    if (state.code == 'email-already-in-use') {
-      snackbar = SnackBar(
-        content: Text(state.message),
-        action: SnackBarAction(
-          label: 'signin',
-          onPressed: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                builder: (context) {
-                  return SigninScreen();
-                },
-              ),
-            );
-          },
-        ),
-      );
-    }
-    return scaffoldState.showSnackBar(snackbar);
-  }
-
   @override
   Widget build(BuildContext context) {
     return AuthenticationBlocProviderWrapper(
@@ -45,10 +20,14 @@ class SignupScreen extends StatelessWidget {
           listener: (BuildContext context, AuthenticationState state) {
             switch (state.runtimeType) {
               case AuthenticationError:
-                _buildErrorSnackbar(context: context, state: state);
+                buildErrorSnackbarFromAuthenticationErrorState(
+                  context: context,
+                  state: state,
+                  destinationScreen: SigninScreen(),
+                );
                 break;
               case AuthenticationSuccess:
-                redirectTo(context: context, screen: DashboardScreen());
+                replaceTo(context, screen: DashboardScreen());
             }
           },
           builder: (BuildContext context, AuthenticationState state) {
@@ -105,8 +84,8 @@ class _Initial extends StatelessWidget {
             ),
             FlatButton(
               child: Text('I already have an account'),
-              onPressed: () => redirectTo(
-                context: context,
+              onPressed: () => replaceTo(
+                context,
                 screen: SigninScreen(),
               ),
             )

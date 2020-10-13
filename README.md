@@ -10,3 +10,6 @@ With the use of [FlutterFire](https://firebase.flutter.dev/).
 ### Network
 With the use of [data_connection_checker](https://pub.dev/packages/data_connection_checker) plugin.
 - notification if action impracticable due to non-connection
+
+### Sections
+- Profile
