@@ -81,7 +81,6 @@ class __ConnectingToCloudState extends State<_ConnectingToCloud> {
         throw UnimplementedError(
             '[DashobardScreen] this should never be thrown');
       }
-      print('ehm');
       dispatchCloudEvent(context: context, event: TriggerRetrieveUser(id: uid));
     });
   }

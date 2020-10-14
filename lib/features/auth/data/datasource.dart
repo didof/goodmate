@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_architecture_scaffold/core/globals/cloud_collections_names.dart';
 import 'package:meta/meta.dart';
 
-
 import 'package:flutter_architecture_scaffold/core/utils/string_methods.dart';
 
 abstract class AuthenticationDatasourceContract {
@@ -66,8 +65,7 @@ class AuthenticationDatasourceRemote extends AuthenticationDatasourceContract {
   @override
   Future<void> signOut() async {
     try {
-      print('datasource signout');
-      return await firebaseAuthInstance.signOut();
+      await firebaseAuthInstance.signOut();
     } catch (e) {
       print('error $e');
     }

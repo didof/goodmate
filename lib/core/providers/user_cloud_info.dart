@@ -12,12 +12,11 @@ class UserCloudInfo with ChangeNotifier {
     this.email,
     this.displayName,
     this.theme = 'light theme',
-  })  : assert(uid != null),
-        assert(email != null);
+  });
 
   List get _props => [uid, email, displayName, theme];
 
-  Map<String, String> _printDebugProps() {
+  void _printDebugProps() {
     final map = {
       'uid': uid,
       'email': email,

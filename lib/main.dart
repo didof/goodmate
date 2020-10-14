@@ -34,8 +34,10 @@ class App extends StatelessWidget {
             title: 'GoodMate',
             debugShowCheckedModeBanner: false,
             home: StreamBuilder(
-              stream: FirebaseAuth.instance.authStateChanges(),
+              stream: FirebaseAuth.instance.userChanges(),
               builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+                print('test: ${snapshot.connectionState}');
+                print('test2: ${snapshot.data}');
                 // show spinner while connecting to firebase
                 if (snapshot.connectionState == ConnectionState.waiting)
                   return CheckingAuthenticationStateScreen();

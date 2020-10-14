@@ -9,6 +9,6 @@ class UseSignOut extends UseCaseWithoutParams {
 
   @override
   Future<void> call() async {
-    return await repository.signOut();
+    await repository.signOut();
   }
 }
