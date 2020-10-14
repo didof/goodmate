@@ -42,6 +42,6 @@ class TriggerSignInUserWithEmailAndPassword extends AuthenticationEvent {
 class TriggerSignout extends AuthenticationEvent {}
 
 class TriggerShiftToPage extends AuthenticationEvent {
-  final int indexPage;
-  TriggerShiftToPage(this.indexPage);
+  final AuthMethods authMethod;
+  TriggerShiftToPage(this.authMethod);
 }

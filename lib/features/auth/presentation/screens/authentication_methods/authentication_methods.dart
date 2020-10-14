@@ -10,6 +10,13 @@ enum AuthMethods {
   Signin,
 }
 
+const DEFAULT_AUTH_METHOD = AuthMethods.Signup;
+
+final List<AuthMethods> authenticationMethodsList = const [
+  AuthMethods.Signup,
+  AuthMethods.Signin,
+];
+
 final Map<AuthMethods, Widget> authenticationMethods = {
   AuthMethods.Signup: SignupScreen(),
   AuthMethods.Signin: SigninScreen(),

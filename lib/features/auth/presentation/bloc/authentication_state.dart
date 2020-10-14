@@ -4,8 +4,8 @@ part of 'authentication_bloc.dart';
 abstract class AuthenticationState {}
 
 class AuthenticationInitial extends AuthenticationState {
-  final int indexPage;
-  AuthenticationInitial({@required this.indexPage});
+  final AuthMethods authMethod;
+  AuthenticationInitial({@required this.authMethod});
 }
 
 class AuthenticationWaiting extends AuthenticationState {}

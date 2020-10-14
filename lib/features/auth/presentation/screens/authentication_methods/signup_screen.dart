@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/utils/buildSnackbar.dart';
 import 'package:flutter_architecture_scaffold/core/utils/navigateTo.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_methods.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/authentication_methods.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/credentials_controller.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signin_screen.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/screen.dart';
@@ -51,20 +53,6 @@ class _Initial extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final CredentialsController _credentialsController = CredentialsController();
 
-  void _dispatchRegisterEvent(BuildContext context) {
-    BlocProvider.of<AuthenticationBloc>(context).add(
-      TriggerCreateUserWithEmailAndPassword(
-        credentials: _credentialsController,
-      ),
-    );
-  }
-
-  void _dispatchShiftToPage(int index, {@required BuildContext context}) {
-    BlocProvider.of<AuthenticationBloc>(context).add(
-      TriggerShiftToPage(index),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -86,11 +74,19 @@ class _Initial extends StatelessWidget {
               FlatButton.icon(
                 icon: Icon(Icons.person_add),
                 label: Text('Sign up'),
-                onPressed: () => _dispatchRegisterEvent(context),
+                onPressed: () => dispatchAuthEvent(
+                  context: context,
+                  event: TriggerCreateUserWithEmailAndPassword(
+                    credentials: _credentialsController,
+                  ),
+                ),
               ),
               FlatButton(
                 child: Text('I already have an account'),
-                onPressed: () => _dispatchShiftToPage(1, context: context),
+                onPressed: () => dispatchAuthEvent(
+                  context: context,
+                  event: TriggerShiftToPage(AuthMethods.Signin),
+                ),
               )
             ],
           ),

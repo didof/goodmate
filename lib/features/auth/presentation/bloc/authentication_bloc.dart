@@ -8,6 +8,7 @@ import 'package:flutter_architecture_scaffold/core/entities/params.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/usecases/use_create_user_with_email_and_password.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/usecases/use_sign_in_user_with_email_and_password.dart';
 import 'package:flutter_architecture_scaffold/features/auth/domain/usecases/use_sign_out.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/authentication_methods.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/credentials_controller.dart';
 import 'package:meta/meta.dart';
 
@@ -24,13 +25,13 @@ class AuthenticationBloc
     @required this.useCreateUserWithEmailAndPassword,
     @required this.useSignInUserWithEmailAndPassword,
     @required this.useSignOut,
-  }) : super(AuthenticationInitial(indexPage: 0));
+  }) : super(AuthenticationInitial(authMethod: DEFAULT_AUTH_METHOD));
 
   @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
-    yield AuthenticationInitial(indexPage: 0);
+    yield AuthenticationInitial(authMethod: DEFAULT_AUTH_METHOD);
     if (event is TriggerCreateUserWithEmailAndPassword) {
       yield AuthenticationWaiting();
       final Either<Failure, UserCredential> user =
@@ -68,9 +69,9 @@ class AuthenticationBloc
     } else if (event is TriggerSignout) {
       yield AuthenticationWaiting();
       await useSignOut();
-      yield AuthenticationInitial(indexPage: 1);
+      yield AuthenticationInitial(authMethod: AuthMethods.Signin);
     } else if (event is TriggerShiftToPage) {
-      yield AuthenticationInitial(indexPage: event.indexPage);
+      yield AuthenticationInitial(authMethod: event.authMethod);
     }
   }
 }

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/utils/buildSnackbar.dart';
 import 'package:flutter_architecture_scaffold/core/utils/navigateTo.dart';
-import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_wrapper.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_methods.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/authentication_methods.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/credentials_controller.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signup_screen.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/screen.dart';
@@ -14,37 +15,33 @@ class SigninScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthenticationBlocProviderWrapper(
-      builder: (context) => Scaffold(
-        body: SafeArea(
-          child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-            listener: (BuildContext context, AuthenticationState state) {
-              switch (state.runtimeType) {
-                case AuthenticationError:
-                  buildErrorSnackbarFromAuthenticationErrorState(
-                    context: context,
-                    state: state,
-                    destinationScreen: SignupScreen(),
-                  );
-                  break;
-                case AuthenticationSuccess:
-                  replaceTo(context, screen: DashboardScreen());
-              }
-            },
-            builder: (BuildContext context, AuthenticationState state) {
-              switch (state.runtimeType) {
-                case AuthenticationWaiting:
-                  return Center(child: CircularProgressIndicator());
-                case AuthenticationSuccess:
-                  return _Successful();
-                case AuthenticationInitial:
-                case AuthenticationError:
-                default:
-                  return _Initial();
-              }
-            },
-          ),
-        ),
+    return Center(
+      child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+        listener: (BuildContext context, AuthenticationState state) {
+          switch (state.runtimeType) {
+            case AuthenticationError:
+              buildErrorSnackbarFromAuthenticationErrorState(
+                context: context,
+                state: state,
+                destinationScreen: SignupScreen(),
+              );
+              break;
+            case AuthenticationSuccess:
+              replaceTo(context, screen: DashboardScreen());
+          }
+        },
+        builder: (BuildContext context, AuthenticationState state) {
+          switch (state.runtimeType) {
+            case AuthenticationWaiting:
+              return Center(child: CircularProgressIndicator());
+            case AuthenticationSuccess:
+              return _Successful();
+            case AuthenticationInitial:
+            case AuthenticationError:
+            default:
+              return _Initial();
+          }
+        },
       ),
     );
   }
@@ -55,20 +52,6 @@ class _Initial extends StatelessWidget {
 
   final GlobalKey<FormState> _formKey = GlobalKey();
   final CredentialsController _credentialsController = CredentialsController();
-
-  void _dispatchSignInEvent(BuildContext context) {
-    BlocProvider.of<AuthenticationBloc>(context).add(
-      TriggerSignInUserWithEmailAndPassword(
-        credentials: _credentialsController,
-      ),
-    );
-  }
-
-  void _dispatchShiftToPage(int index, {@required BuildContext context}) {
-    BlocProvider.of<AuthenticationBloc>(context).add(
-      TriggerShiftToPage(index),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,11 +74,21 @@ class _Initial extends StatelessWidget {
               FlatButton.icon(
                 icon: Icon(Icons.accessibility_new),
                 label: Text('Sign in'),
-                onPressed: () => _dispatchSignInEvent(context),
+                onPressed: () => dispatchAuthEvent(
+                  context: context,
+                  event: TriggerSignInUserWithEmailAndPassword(
+                    credentials: _credentialsController,
+                  ),
+                ),
               ),
               FlatButton(
                 child: Text('I need to create an account'),
-                onPressed: () => _dispatchShiftToPage(0, context: context),
+                onPressed: () => dispatchAuthEvent(
+                  context: context,
+                  event: TriggerShiftToPage(
+                    AuthMethods.Signup,
+                  ),
+                ),
               )
             ],
           ),

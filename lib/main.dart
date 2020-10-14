@@ -44,14 +44,13 @@ class App extends StatelessWidget {
             home: StreamBuilder(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
+                // show spinner while connecting to firebase
+                if (snapshot.connectionState == ConnectionState.waiting)
                   return CheckingAuthenticationStateScreen();
-                }
-                if (snapshot.connectionState == ConnectionState.active) {
-                  if (snapshot.hasData) {
-                    return DashboardScreen();
-                  }
-                }
+                // when connected, if user is already authenticated send him forward
+                if (snapshot.connectionState == ConnectionState.active &&
+                    snapshot.hasData) return DashboardScreen();
+                // otherwise send him to auth
                 return AuthenticationScreen();
               },
             ),

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/authentication_methods.dart';
-import 'package:flutter_architecture_scaffold/injection_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthenticationScreen extends StatelessWidget {
@@ -57,9 +56,9 @@ class _AuthenticationBodyState extends State<AuthenticationBody> {
     );
   }
 
-  void _shiftToPage(int index) {
+  void _shiftToPage(AuthMethods authMethod) {
     _pageController.animateToPage(
-      index,
+      authenticationMethodsList.indexOf(authMethod),
       duration: Duration(milliseconds: 800),
       curve: Curves.easeInOut,
     );
@@ -70,7 +69,7 @@ class _AuthenticationBodyState extends State<AuthenticationBody> {
     return BlocListener<AuthenticationBloc, AuthenticationState>(
       listener: (context, state) {
         if (state is AuthenticationInitial) {
-          _shiftToPage(state.indexPage);
+          _shiftToPage(state.authMethod);
         }
       },
       child: PageView(

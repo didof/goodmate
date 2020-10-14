@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
-import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_wrapper.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_methods.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WelcomeScreen extends StatefulWidget {
