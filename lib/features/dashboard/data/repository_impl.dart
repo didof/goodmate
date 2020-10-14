@@ -6,7 +6,7 @@ import 'package:flutter_architecture_scaffold/features/dashboard/data/datasource
 import 'package:flutter_architecture_scaffold/features/dashboard/domain/repository_contract.dart';
 
 class CloudRepositoryImpl extends CloudRepositoryContract {
-  final CloudDatasourceRemote datasource;
+  final CloudDatasourceContract datasource;
   CloudRepositoryImpl({@required this.datasource});
 
   @override

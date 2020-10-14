@@ -3,7 +3,10 @@ part of 'authentication_bloc.dart';
 @immutable
 abstract class AuthenticationState {}
 
-class AuthenticationInitial extends AuthenticationState {}
+class AuthenticationInitial extends AuthenticationState {
+  final int indexPage;
+  AuthenticationInitial({@required this.indexPage});
+}
 
 class AuthenticationWaiting extends AuthenticationState {}
 

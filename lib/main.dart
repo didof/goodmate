@@ -4,10 +4,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/providers/current_user.dart';
 import 'package:flutter_architecture_scaffold/core/providers/instances.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_screen.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/checking_authentication_state_screen.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signup_screen.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/screen.dart';
+import 'package:flutter_architecture_scaffold/injection_container.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'injection_container.dart' as di;
@@ -33,24 +36,25 @@ class App extends StatelessWidget {
         ),
       ],
       builder: (context, child) {
-        final instances = Provider.of<Instances>(context, listen: false);
-        return MaterialApp(
-          title: 'GoodMate',
-          debugShowCheckedModeBanner: false,
-          home: StreamBuilder(
-            stream: instances.firebaseAuth.authStateChanges(),
-            builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
-              print('changed $snapshot');
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return CheckingAuthenticationStateScreen();
-              }
-              if (snapshot.connectionState == ConnectionState.active) {
-                if (snapshot.hasData) {
-                  return DashboardScreen();
+        return BlocProvider(
+          create: (context) => sl<AuthenticationBloc>(),
+          child: MaterialApp(
+            title: 'GoodMate',
+            debugShowCheckedModeBanner: false,
+            home: StreamBuilder(
+              stream: FirebaseAuth.instance.authStateChanges(),
+              builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CheckingAuthenticationStateScreen();
                 }
-              }
-              return AuthenticationScreen();
-            },
+                if (snapshot.connectionState == ConnectionState.active) {
+                  if (snapshot.hasData) {
+                    return DashboardScreen();
+                  }
+                }
+                return AuthenticationScreen();
+              },
+            ),
           ),
         );
       },

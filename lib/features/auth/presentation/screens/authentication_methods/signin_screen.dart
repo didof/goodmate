@@ -64,6 +64,12 @@ class _Initial extends StatelessWidget {
     );
   }
 
+  void _dispatchShiftToPage(int index, {@required BuildContext context}) {
+    BlocProvider.of<AuthenticationBloc>(context).add(
+      TriggerShiftToPage(index),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -89,10 +95,7 @@ class _Initial extends StatelessWidget {
               ),
               FlatButton(
                 child: Text('I need to create an account'),
-                onPressed: () => replaceTo(
-                  context,
-                  screen: SignupScreen(),
-                ),
+                onPressed: () => _dispatchShiftToPage(0, context: context),
               )
             ],
           ),

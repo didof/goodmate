@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/utils/buildSnackbar.dart';
 import 'package:flutter_architecture_scaffold/core/utils/navigateTo.dart';
-import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_wrapper.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/credentials_controller.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signin_screen.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/screen.dart';
@@ -44,43 +43,6 @@ class SignupScreen extends StatelessWidget {
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return AuthenticationBlocProviderWrapper(
-  //     builder: (context) => Scaffold(
-  //       body: SafeArea(
-  //         child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-  //           listener: (BuildContext context, AuthenticationState state) {
-  //             switch (state.runtimeType) {
-  //               case AuthenticationError:
-  //                 buildErrorSnackbarFromAuthenticationErrorState(
-  //                   context: context,
-  //                   state: state,
-  //                   destinationScreen: SigninScreen(),
-  //                 );
-  //                 break;
-  //               case AuthenticationSuccess:
-  //                 replaceTo(context, screen: DashboardScreen());
-  //             }
-  //           },
-  //           builder: (BuildContext context, AuthenticationState state) {
-  //             switch (state.runtimeType) {
-  //               case AuthenticationWaiting:
-  //                 return Center(child: CircularProgressIndicator());
-  //               case AuthenticationSuccess:
-  //                 return _Successful();
-  //               case AuthenticationInitial:
-  //               case AuthenticationError:
-  //               default:
-  //                 return _Initial();
-  //             }
-  //           },
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
 
 class _Initial extends StatelessWidget {
@@ -94,6 +56,12 @@ class _Initial extends StatelessWidget {
       TriggerCreateUserWithEmailAndPassword(
         credentials: _credentialsController,
       ),
+    );
+  }
+
+  void _dispatchShiftToPage(int index, {@required BuildContext context}) {
+    BlocProvider.of<AuthenticationBloc>(context).add(
+      TriggerShiftToPage(index),
     );
   }
 
@@ -122,10 +90,7 @@ class _Initial extends StatelessWidget {
               ),
               FlatButton(
                 child: Text('I already have an account'),
-                onPressed: () => replaceTo(
-                  context,
-                  screen: SigninScreen(),
-                ),
+                onPressed: () => _dispatchShiftToPage(1, context: context),
               )
             ],
           ),

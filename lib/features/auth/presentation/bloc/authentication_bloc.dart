@@ -24,13 +24,13 @@ class AuthenticationBloc
     @required this.useCreateUserWithEmailAndPassword,
     @required this.useSignInUserWithEmailAndPassword,
     @required this.useSignOut,
-  }) : super(AuthenticationInitial());
+  }) : super(AuthenticationInitial(indexPage: 0));
 
   @override
   Stream<AuthenticationState> mapEventToState(
     AuthenticationEvent event,
   ) async* {
-    yield AuthenticationInitial();
+    yield AuthenticationInitial(indexPage: 0);
     if (event is TriggerCreateUserWithEmailAndPassword) {
       yield AuthenticationWaiting();
       final Either<Failure, UserCredential> user =
@@ -68,6 +68,9 @@ class AuthenticationBloc
     } else if (event is TriggerSignout) {
       yield AuthenticationWaiting();
       await useSignOut();
+      yield AuthenticationInitial(indexPage: 1);
+    } else if (event is TriggerShiftToPage) {
+      yield AuthenticationInitial(indexPage: event.indexPage);
     }
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/providers/instances.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/widgets/Waiting.dart';
+import 'package:flutter_architecture_scaffold/injection_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
@@ -22,42 +23,37 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CloudWrapper(
-      builder: (context) {
-        return AuthenticationBlocProviderWrapper(
-          builder: (context) {
-            return Scaffold(
-              appBar: AppBar(
-                title: const Text('Dashboard'),
-                actions: [
-                  IconButton(
-                    icon: const Icon(Icons.exit_to_app),
-                    onPressed: () => _dispatchSignOutEvent(context),
-                  )
-                ],
-              ),
-              drawer: DashboardDrawer(),
-              body: BlocBuilder<CloudBloc, CloudState>(
-                builder: (context, state) {
-                  switch (state.runtimeType) {
-                    case CloudInitial:
-                      return _Initial();
-                    case CloudWaiting:
-                      return WaitingIndicator();
-                    case CloudSuccess:
-                      return AvaiableFlat(
-                        (state as CloudSuccess).documentSnapshot,
-                      );
-                    case CloudError:
-                    default:
-                      return Text('cloud error');
-                  }
-                },
-              ),
-            );
+    return BlocProvider(
+      create: (context) => sl<CloudBloc>(),
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Dashboard'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.exit_to_app),
+              onPressed: () => _dispatchSignOutEvent(context),
+            )
+          ],
+        ),
+        drawer: DashboardDrawer(),
+        body: BlocBuilder<CloudBloc, CloudState>(
+          builder: (context, state) {
+            switch (state.runtimeType) {
+              case CloudInitial:
+                return _Initial();
+              case CloudWaiting:
+                return WaitingIndicator();
+              case CloudSuccess:
+                return AvaiableFlat(
+                  (state as CloudSuccess).documentSnapshot,
+                );
+              case CloudError:
+              default:
+                return Text('cloud error');
+            }
           },
-        );
-      },
+        ),
+      ),
     );
   }
 }
