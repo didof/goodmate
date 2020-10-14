@@ -4,7 +4,11 @@ import 'package:flutter_architecture_scaffold/features/auth/presentation/screens
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AuthenticationScreen extends StatelessWidget {
-  const AuthenticationScreen({Key key}) : super(key: key);
+  final AuthMethods authMethod;
+  const AuthenticationScreen({
+    Key key,
+    this.authMethod = AuthMethods.Signup,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +22,10 @@ class AuthenticationScreen extends StatelessWidget {
               height: double.infinity,
               color: theme.primaryColor,
             ),
-            AuthenticationBody(theme)
+            AuthenticationBody(
+              theme,
+              authMethod: authMethod,
+            )
           ],
         ),
       ),
@@ -28,7 +35,12 @@ class AuthenticationScreen extends StatelessWidget {
 
 class AuthenticationBody extends StatefulWidget {
   final ThemeData theme;
-  AuthenticationBody(this.theme, {Key key}) : super(key: key);
+  final AuthMethods authMethod;
+  AuthenticationBody(
+    this.theme, {
+    this.authMethod,
+    Key key,
+  }) : super(key: key);
 
   @override
   _AuthenticationBodyState createState() => _AuthenticationBodyState();
@@ -39,7 +51,8 @@ class _AuthenticationBodyState extends State<AuthenticationBody> {
 
   @override
   void initState() {
-    _pageController = PageController(initialPage: 0);
+    _pageController =
+        PageController(initialPage: _getInitialPage(widget.authMethod));
     super.initState();
   }
 
@@ -47,6 +60,19 @@ class _AuthenticationBodyState extends State<AuthenticationBody> {
   void dispose() {
     _pageController.dispose();
     super.dispose();
+  }
+
+  int _getInitialPage(AuthMethods authMethod) {
+    int initialPage;
+    switch (authMethod) {
+      case AuthMethods.Signin:
+        initialPage = 1;
+        break;
+      case AuthMethods.Signup:
+      default:
+        initialPage = 0;
+    }
+    return initialPage;
   }
 
   void _shiftToPage(AuthMethods authMethod) {

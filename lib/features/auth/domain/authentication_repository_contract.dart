@@ -14,5 +14,5 @@ abstract class AuthenticationRepositoryContract {
     @required String password,
   });
 
-  Future<void> signOut();
+  Future<User> signOut();
 }

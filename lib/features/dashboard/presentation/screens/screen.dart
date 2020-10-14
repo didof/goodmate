@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/bloc_providers_methods.dart';
 import 'package:flutter_architecture_scaffold/core/providers/user_cloud_info.dart';
 import 'package:flutter_architecture_scaffold/core/utils/show_snackbars.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_screen.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/all_features/all_features_screen.dart';
 
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/widgets/Waiting.dart';
@@ -19,45 +21,58 @@ class DashboardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<CloudBloc>(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Dashboard'),
-        ),
-        drawer: DashboardDrawer(),
-        body: BlocConsumer<CloudBloc, CloudState>(
-          listener: (context, state) {
-            if (state.runtimeType is CloudError) {
-              showErrorSnackbarFromCloudErrorState(
-                context: context,
-                state: state,
-              );
-            }
-          },
-          builder: (context, state) {
-            switch (state.runtimeType) {
-              // ? setup
-              case CloudConnectToCloud:
-                return _ConnectingToCloud();
+    return BlocListener<AuthenticationBloc, AuthenticationState>(
+      listener: (context, state) {
+        if (state is AuthenticationRedirectTo) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) {
+                return AuthenticationScreen();
+              },
+            ),
+          );
+        }
+      },
+      child: BlocProvider(
+        create: (context) => sl<CloudBloc>(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: const Text('Dashboard'),
+          ),
+          drawer: DashboardDrawer(),
+          body: BlocConsumer<CloudBloc, CloudState>(
+            listener: (context, state) {
+              if (state.runtimeType is CloudError) {
+                showErrorSnackbarFromCloudErrorState(
+                  context: context,
+                  state: state,
+                );
+              }
+            },
+            builder: (context, state) {
+              switch (state.runtimeType) {
+                // ? setup
+                case CloudConnectToCloud:
+                  return _ConnectingToCloud();
 
-              // ? loading
-              case CloudWaiting:
-                return WaitingIndicator(
-                    message: (state as CloudWaiting).message);
+                // ? loading
+                case CloudWaiting:
+                  return WaitingIndicator(
+                      message: (state as CloudWaiting).message);
 
-              // * Success
-              case CloudSuccessButFirstAccess:
-                return FirstAccessSection();
-              case CloudSuccessAndAlreadyTenantIn:
-                return AllFeaturesScreen();
+                // * Success
+                case CloudSuccessButFirstAccess:
+                  return FirstAccessSection();
+                case CloudSuccessAndAlreadyTenantIn:
+                  return AllFeaturesScreen();
 
-              // ! Error
-              case CloudError:
-              default:
-                return _Error();
-            }
-          },
+                // ! Error
+                case CloudError:
+                default:
+                  return _Error();
+              }
+            },
+          ),
         ),
       ),
     );

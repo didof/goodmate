@@ -23,3 +23,8 @@ class AuthenticationSuccess extends AuthenticationState {
   final UserCredential userCredential;
   AuthenticationSuccess({@required this.userCredential});
 }
+
+class AuthenticationRedirectTo extends AuthenticationState {
+  final AuthMethods authMethod;
+  AuthenticationRedirectTo(this.authMethod);
+}

@@ -16,7 +16,7 @@ abstract class AuthenticationDatasourceContract {
     @required String password,
   });
 
-  Future<void> signOut();
+  Future<User> signOut();
 }
 
 class AuthenticationDatasourceRemote extends AuthenticationDatasourceContract {
@@ -63,11 +63,12 @@ class AuthenticationDatasourceRemote extends AuthenticationDatasourceContract {
   }
 
   @override
-  Future<void> signOut() async {
+  Future<User> signOut() async {
     try {
       await firebaseAuthInstance.signOut();
+      return firebaseAuthInstance.currentUser;
     } catch (e) {
-      print('error $e');
+      throw UnimplementedError('signOut bu: $e');
     }
   }
 }

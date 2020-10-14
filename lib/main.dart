@@ -34,7 +34,7 @@ class App extends StatelessWidget {
             title: 'GoodMate',
             debugShowCheckedModeBanner: false,
             home: StreamBuilder(
-              stream: FirebaseAuth.instance.userChanges(),
+              stream: FirebaseAuth.instance.authStateChanges(),
               builder: (BuildContext context, AsyncSnapshot<User> snapshot) {
                 print('test: ${snapshot.connectionState}');
                 print('test2: ${snapshot.data}');

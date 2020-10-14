@@ -78,7 +78,7 @@ class AuthenticationRepositoryImpl extends AuthenticationRepositoryContract {
   }
 
   @override
-  Future<void> signOut() async {
-    await datasource.signOut();
+  Future<User> signOut() async {
+    return await datasource.signOut();
   }
 }
