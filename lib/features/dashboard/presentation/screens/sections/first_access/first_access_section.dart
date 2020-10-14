@@ -1,4 +1,8 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_architecture_scaffold/core/utils/navigateTo.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/create_flat.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/join_flat.dart';
 
 class FirstAccessSection extends StatefulWidget {
   FirstAccessSection({Key key}) : super(key: key);
@@ -23,7 +27,7 @@ class _FirstAccessSectionState extends State<FirstAccessSection> {
     return PageView(
       controller: _pageController,
       children: [
-        CreateFlat(),
+        _CreateFlatLander(),
         Welcome(shiftTo),
         JoinFlat(),
       ],
@@ -74,24 +78,24 @@ class Welcome extends StatelessWidget {
   }
 }
 
-class CreateFlat extends StatelessWidget {
-  const CreateFlat({Key key}) : super(key: key);
+class _CreateFlatLander extends StatelessWidget {
+  const _CreateFlatLander({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Text('Create flat'),
-    );
-  }
-}
-
-class JoinFlat extends StatelessWidget {
-  const JoinFlat({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text('Join flat'),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          const Text('Create a Flat'),
+          const Text('[Explain]'),
+          FlatButton.icon(
+            onPressed: () => pushTo(context, screen: CreateFlat()),
+            icon: const Icon(Icons.home),
+            label: const Text('Create'),
+          ),
+        ],
+      ),
     );
   }
 }
