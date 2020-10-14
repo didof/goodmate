@@ -14,17 +14,18 @@ part 'cloud_state.dart';
 class CloudBloc extends Bloc<CloudEvent, CloudState> {
   final UseRetrieveUser useRetrieveUser;
 
-  CloudBloc({@required this.useRetrieveUser}) : super(CloudInitial());
+  CloudBloc({@required this.useRetrieveUser}) : super(CloudConnectToCloud());
 
   @override
   Stream<CloudState> mapEventToState(
     CloudEvent event,
   ) async* {
-    yield CloudInitial();
+    yield CloudConnectToCloud();
     if (event is TriggerRetrieveUser) {
-      yield CloudWaiting();
+      yield CloudWaiting(message: 'Connecting to the Cloud ...');
       final Either<Failure, DocumentSnapshot> doc =
           await useRetrieveUser(RetrieveUserParams(id: event.id));
+      yield CloudWaiting(message: 'User info received ...');
       yield* doc.fold(
         (l) async* {
           if (l is RetrieveUserFailure) {
@@ -32,7 +33,11 @@ class CloudBloc extends Bloc<CloudEvent, CloudState> {
           }
         },
         (r) async* {
-          yield CloudSuccess(documentSnapshot: r);
+          if (r.data().containsKey('tenantIn')) {
+            yield CloudSuccessAndAlreadyTenantIn(documentSnapshot: r);
+          } else {
+            yield CloudSuccessButFirstAccess(documentSnapshot: r);
+          }
         },
       );
     }

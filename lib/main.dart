@@ -2,12 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/providers/current_user.dart';
-import 'package:flutter_architecture_scaffold/core/providers/instances.dart';
+import 'package:flutter_architecture_scaffold/core/providers/user_cloud_info.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_screen.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/checking_authentication_state_screen.dart';
-import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signup_screen.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/screen.dart';
 import 'package:flutter_architecture_scaffold/injection_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -27,13 +25,7 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<CurrentUser>(create: (_) => CurrentUser()),
-        ChangeNotifierProvider<Instances>(
-          create: (_) => Instances(
-            firebaseAuth: FirebaseAuth.instance,
-            firebaseFirestore: FirebaseFirestore.instance,
-          ),
-        ),
+        ChangeNotifierProvider<UserCloudInfo>(create: (_) => UserCloudInfo()),
       ],
       builder: (context, child) {
         return BlocProvider(
@@ -49,7 +41,11 @@ class App extends StatelessWidget {
                   return CheckingAuthenticationStateScreen();
                 // when connected, if user is already authenticated send him forward
                 if (snapshot.connectionState == ConnectionState.active &&
-                    snapshot.hasData) return DashboardScreen();
+                    snapshot.hasData) {
+                  Provider.of<UserCloudInfo>(context)
+                      .updateUserCloudInfo(snapshot.data);
+                  return DashboardScreen();
+                }
                 // otherwise send him to auth
                 return AuthenticationScreen();
               },

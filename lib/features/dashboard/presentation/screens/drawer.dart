@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/providers/current_user.dart';
+import 'package:flutter_architecture_scaffold/core/bloc_providers_methods.dart';
+import 'package:flutter_architecture_scaffold/core/providers/user_cloud_info.dart';
 import 'package:flutter_architecture_scaffold/core/utils/navigateTo.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/profile_section/profile_section.dart';
 import 'package:provider/provider.dart';
 
@@ -19,7 +21,7 @@ class DashboardDrawer extends StatelessWidget {
       child: ListView(
         children: [
           AppBar(
-            title: Consumer<CurrentUser>(builder: (context, value, child) {
+            title: Consumer<UserCloudInfo>(builder: (context, value, child) {
               return Text(value.displayName ?? value.email);
             }),
             automaticallyImplyLeading: false,
@@ -39,6 +41,19 @@ class DashboardDrawer extends StatelessWidget {
             onTap: () => pushTo(
               context,
               screen: ProfileSection(),
+            ),
+          ),
+          ListTile(
+            leading: const CircleAvatar(
+              child: const Icon(Icons.exit_to_app),
+            ),
+            title: const Text(
+              'Sign Out',
+              style: TextStyle(color: Colors.grey),
+            ),
+            onTap: () => dispatchAuthEvent(
+              context: context,
+              event: TriggerSignout(),
             ),
           )
         ],

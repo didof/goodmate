@@ -1,22 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/providers/instances.dart';
+import 'package:flutter_architecture_scaffold/core/bloc_providers_methods.dart';
+import 'package:flutter_architecture_scaffold/core/providers/user_cloud_info.dart';
+import 'package:flutter_architecture_scaffold/core/utils/show_snackbars.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/all_features/all_features_screen.dart';
+
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/widgets/Waiting.dart';
 import 'package:flutter_architecture_scaffold/injection_container.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
-import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/bloc/cloud_bloc.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/drawer.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/welcome_screen.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/first_access_section.dart';
+import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatelessWidget {
   const DashboardScreen({Key key}) : super(key: key);
-
-  void _dispatchSignOutEvent(BuildContext context) async {
-    BlocProvider.of<AuthenticationBloc>(context).add(TriggerSignout());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,28 +24,38 @@ class DashboardScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Dashboard'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.exit_to_app),
-              onPressed: () => _dispatchSignOutEvent(context),
-            )
-          ],
         ),
         drawer: DashboardDrawer(),
-        body: BlocBuilder<CloudBloc, CloudState>(
+        body: BlocConsumer<CloudBloc, CloudState>(
+          listener: (context, state) {
+            if (state.runtimeType is CloudError) {
+              showErrorSnackbarFromCloudErrorState(
+                context: context,
+                state: state,
+              );
+            }
+          },
           builder: (context, state) {
             switch (state.runtimeType) {
-              case CloudInitial:
-                return _Initial();
+              // ? setup
+              case CloudConnectToCloud:
+                return _ConnectingToCloud();
+
+              // ? loading
               case CloudWaiting:
-                return WaitingIndicator();
-              case CloudSuccess:
-                return AvaiableFlat(
-                  (state as CloudSuccess).documentSnapshot,
-                );
+                return WaitingIndicator(
+                    message: (state as CloudWaiting).message);
+
+              // * Success
+              case CloudSuccessButFirstAccess:
+                return FirstAccessSection();
+              case CloudSuccessAndAlreadyTenantIn:
+                return AllFeaturesScreen();
+
+              // ! Error
               case CloudError:
               default:
-                return Text('cloud error');
+                return _Error();
             }
           },
         ),
@@ -55,54 +64,62 @@ class DashboardScreen extends StatelessWidget {
   }
 }
 
-class _Initial extends StatefulWidget {
-  const _Initial({Key key}) : super(key: key);
+class _ConnectingToCloud extends StatefulWidget {
+  const _ConnectingToCloud({Key key}) : super(key: key);
 
   @override
-  __InitialState createState() => __InitialState();
+  __ConnectingToCloudState createState() => __ConnectingToCloudState();
 }
 
-class __InitialState extends State<_Initial> {
+class __ConnectingToCloudState extends State<_ConnectingToCloud> {
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      final Instances instances =
-          Provider.of<Instances>(context, listen: false);
-      final String uid = instances.firebaseAuth.currentUser.uid;
-      BlocProvider.of<CloudBloc>(context).add(TriggerRetrieveUser(id: uid));
+      final String uid = Provider.of<UserCloudInfo>(context, listen: false).uid;
+      if (uid == null || uid.isEmpty) {
+        throw UnimplementedError(
+            '[DashobardScreen] this should never be thrown');
+      }
+      print('ehm');
+      dispatchCloudEvent(context: context, event: TriggerRetrieveUser(id: uid));
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        LinearProgressIndicator(),
-        Text('I am retrieving your flats'),
+        const LinearProgressIndicator(),
+        const Expanded(
+          child: const Center(
+            child:
+                const Text('Checking if you already participate to some flat.'),
+          ),
+        ),
       ],
     );
   }
 }
 
-class AvaiableFlat extends StatelessWidget {
-  final DocumentSnapshot doc;
-  const AvaiableFlat(
-    this.doc, {
-    Key key,
-  }) : super(key: key);
+class _Error extends StatelessWidget {
+  const _Error({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (doc.data().containsKey('tenantIn')) {
-      return ListView.builder(
-        itemCount: 10,
-        itemBuilder: (BuildContext context, int index) {
-          return ListTile(title: Text('flat number ' + (index + 1).toString()));
-        },
-      );
-    } else {
-      return WelcomeScreen();
-    }
+    final String uid = Provider.of<UserCloudInfo>(context, listen: false).uid;
+    return Column(
+      children: [
+        Text('Something went orribly wrong.'),
+        FlatButton(
+          child: Text(
+            'Please, fix this.',
+          ),
+          onPressed: () => dispatchCloudEvent(
+              context: context, event: TriggerRetrieveUser(id: uid)),
+        )
+      ],
+    );
   }
 }

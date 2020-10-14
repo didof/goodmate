@@ -49,13 +49,6 @@ class _AuthenticationBodyState extends State<AuthenticationBody> {
     super.dispose();
   }
 
-  Widget _buildCard(Widget child) {
-    return Card(
-      margin: const EdgeInsets.all(32.0),
-      child: child,
-    );
-  }
-
   void _shiftToPage(AuthMethods authMethod) {
     _pageController.animateToPage(
       authenticationMethodsList.indexOf(authMethod),
@@ -76,6 +69,13 @@ class _AuthenticationBodyState extends State<AuthenticationBody> {
         controller: _pageController,
         children: mapAuthenticationMethods(wrapChildrenWith: _buildCard),
       ),
+    );
+  }
+
+  Widget _buildCard(Widget child) {
+    return Card(
+      margin: const EdgeInsets.all(32.0),
+      child: child,
     );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/utils/buildSnackbar.dart';
+import 'package:flutter_architecture_scaffold/core/bloc_providers_methods.dart';
+import 'package:flutter_architecture_scaffold/core/utils/show_snackbars.dart';
 import 'package:flutter_architecture_scaffold/core/utils/navigateTo.dart';
-import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_methods.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/authentication_methods.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/credentials_controller.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signup_screen.dart';
@@ -20,7 +20,7 @@ class SigninScreen extends StatelessWidget {
         listener: (BuildContext context, AuthenticationState state) {
           switch (state.runtimeType) {
             case AuthenticationError:
-              buildErrorSnackbarFromAuthenticationErrorState(
+              showErrorSnackbarFromAuthenticationErrorState(
                 context: context,
                 state: state,
                 destinationScreen: SignupScreen(),

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
 class WaitingIndicator extends StatelessWidget {
-  const WaitingIndicator({Key key}) : super(key: key);
+  final String message;
+  const WaitingIndicator({this.message});
 
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: CircularProgressIndicator(),
+      child: Column(
+        children: [
+          CircularProgressIndicator(),
+          if (message != null) Text(message),
+        ],
+      ),
     );
   }
 }
