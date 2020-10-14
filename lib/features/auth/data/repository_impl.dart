@@ -8,8 +8,8 @@ import 'package:flutter_architecture_scaffold/features/auth/data/datasource.dart
 import 'package:flutter_architecture_scaffold/features/auth/domain/authentication_repository_contract.dart';
 
 class AuthenticationRepositoryImpl extends AuthenticationRepositoryContract {
-  final AuthenticationDatasourceRemote datasource;
-  final NetworkInfoImpl networkInfoImpl;
+  final AuthenticationDatasourceContract datasource;
+  final NetworkInfoContract networkInfoImpl;
   AuthenticationRepositoryImpl({
     @required this.datasource,
     @required this.networkInfoImpl,

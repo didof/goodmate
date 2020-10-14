@@ -4,14 +4,18 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/providers/current_user.dart';
 import 'package:flutter_architecture_scaffold/core/providers/instances.dart';
+import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_screen.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/checking_authentication_state_screen.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signup_screen.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/screen.dart';
 import 'package:provider/provider.dart';
 
+import 'injection_container.dart' as di;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await di.setup();
   runApp(App());
 }
 
@@ -45,7 +49,7 @@ class App extends StatelessWidget {
                   return DashboardScreen();
                 }
               }
-              return SignupScreen();
+              return AuthenticationScreen();
             },
           ),
         );

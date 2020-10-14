@@ -14,40 +14,73 @@ class SignupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthenticationBlocProviderWrapper(
-      builder: (context) => Scaffold(
-        body: SafeArea(
-          child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
-            listener: (BuildContext context, AuthenticationState state) {
-              switch (state.runtimeType) {
-                case AuthenticationError:
-                  buildErrorSnackbarFromAuthenticationErrorState(
-                    context: context,
-                    state: state,
-                    destinationScreen: SigninScreen(),
-                  );
-                  break;
-                case AuthenticationSuccess:
-                  replaceTo(context, screen: DashboardScreen());
-              }
-            },
-            builder: (BuildContext context, AuthenticationState state) {
-              switch (state.runtimeType) {
-                case AuthenticationWaiting:
-                  return Center(child: CircularProgressIndicator());
-                case AuthenticationSuccess:
-                  return _Successful();
-                case AuthenticationInitial:
-                case AuthenticationError:
-                default:
-                  return _Initial();
-              }
-            },
-          ),
-        ),
+    return Center(
+      child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+        listener: (BuildContext context, AuthenticationState state) {
+          switch (state.runtimeType) {
+            case AuthenticationError:
+              buildErrorSnackbarFromAuthenticationErrorState(
+                context: context,
+                state: state,
+                destinationScreen: SigninScreen(),
+              );
+              break;
+            case AuthenticationSuccess:
+              replaceTo(context, screen: DashboardScreen());
+          }
+        },
+        builder: (BuildContext context, AuthenticationState state) {
+          switch (state.runtimeType) {
+            case AuthenticationWaiting:
+              return Center(child: CircularProgressIndicator());
+            case AuthenticationSuccess:
+              return _Successful();
+            case AuthenticationInitial:
+            case AuthenticationError:
+            default:
+              return _Initial();
+          }
+        },
       ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return AuthenticationBlocProviderWrapper(
+  //     builder: (context) => Scaffold(
+  //       body: SafeArea(
+  //         child: BlocConsumer<AuthenticationBloc, AuthenticationState>(
+  //           listener: (BuildContext context, AuthenticationState state) {
+  //             switch (state.runtimeType) {
+  //               case AuthenticationError:
+  //                 buildErrorSnackbarFromAuthenticationErrorState(
+  //                   context: context,
+  //                   state: state,
+  //                   destinationScreen: SigninScreen(),
+  //                 );
+  //                 break;
+  //               case AuthenticationSuccess:
+  //                 replaceTo(context, screen: DashboardScreen());
+  //             }
+  //           },
+  //           builder: (BuildContext context, AuthenticationState state) {
+  //             switch (state.runtimeType) {
+  //               case AuthenticationWaiting:
+  //                 return Center(child: CircularProgressIndicator());
+  //               case AuthenticationSuccess:
+  //                 return _Successful();
+  //               case AuthenticationInitial:
+  //               case AuthenticationError:
+  //               default:
+  //                 return _Initial();
+  //             }
+  //           },
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 class _Initial extends StatelessWidget {

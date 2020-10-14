@@ -1,10 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_architecture_scaffold/core/globals/cloud_collections_names.dart';
 import 'package:meta/meta.dart';
 
-import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
 
 import 'package:flutter_architecture_scaffold/core/utils/string_methods.dart';
 
