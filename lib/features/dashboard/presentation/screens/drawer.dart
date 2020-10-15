@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/bloc_providers_methods.dart';
 import 'package:flutter_architecture_scaffold/core/providers/user_cloud_info.dart';
-import 'package:flutter_architecture_scaffold/core/utils/navigateTo.dart';
+import 'package:flutter_architecture_scaffold/core/utils/navigate_to.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/profile_section/profile_section.dart';
 import 'package:provider/provider.dart';

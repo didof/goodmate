@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_architecture_scaffold/core/globals/cloud_collections_names.dart';
 import 'package:meta/meta.dart';
 
-import 'package:flutter_architecture_scaffold/core/utils/string_methods.dart';
+import 'package:flutter_architecture_scaffold/core/utils/extensions_methods.dart';
 
 abstract class AuthenticationDatasourceContract {
   Future<UserCredential> createUserWithEmailAndPassword({
