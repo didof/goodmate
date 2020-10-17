@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/bloc/current_user_info_bloc.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/checkers.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/checkers.dart';
 
 showErrorSnackbarFromAuthenticationErrorState({
   @required BuildContext context,
@@ -53,5 +53,7 @@ throwInfoSnackbar(
     backgroundColor: Theme.of(context).errorColor,
   );
 
-  Scaffold.of(context).showSnackBar(snackbar);
+  Scaffold.of(context)
+    ..hideCurrentSnackBar()
+    ..showSnackBar(snackbar);
 }

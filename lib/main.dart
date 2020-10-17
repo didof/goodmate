@@ -84,6 +84,11 @@ class CustomMaterialApp extends StatelessWidget {
       title: 'GoodMate',
       debugShowCheckedModeBanner: false,
       home: stream,
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+        accentColor: Colors.amber,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
     );
   }
 }
