@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_architecture_scaffold/core/utils/extensions_methods.dart';
+import 'package:flutter_architecture_scaffold/core/utils/extensions.dart';
 
 class UserCloudInfo with ChangeNotifier {
   String uid;

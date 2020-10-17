@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-class WaitingIndicator extends StatelessWidget {
+class WaitingMessage extends StatelessWidget {
   final String message;
-  const WaitingIndicator({this.message});
+  const WaitingMessage({this.message});
 
   @override
   Widget build(BuildContext context) {

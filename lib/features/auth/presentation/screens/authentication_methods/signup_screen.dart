@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/bloc_providers_methods.dart';
+import 'package:flutter_architecture_scaffold/core/utils/bloc_dispatchers.dart';
 import 'package:flutter_architecture_scaffold/core/utils/show_snackbars.dart';
-import 'package:flutter_architecture_scaffold/core/utils/navigate_to.dart';
+import 'package:flutter_architecture_scaffold/core/utils/navigator_methods.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/authentication_methods.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/credentials_controller.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_methods/signin_screen.dart';

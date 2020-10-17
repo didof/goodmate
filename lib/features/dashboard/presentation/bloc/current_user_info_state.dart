@@ -1,16 +1,16 @@
-part of 'cloud_bloc.dart';
+part of 'current_user_info_bloc.dart';
 
 @immutable
-abstract class CloudState {}
+abstract class CurrentUserInfoState {}
 
-class CloudConnectToCloud extends CloudState {}
+class CloudConnectToCloud extends CurrentUserInfoState {}
 
-class CloudWaiting extends CloudState {
+class CloudWaiting extends CurrentUserInfoState {
   final String message;
   CloudWaiting({this.message});
 }
 
-class CloudError extends CloudState {
+class CloudError extends CurrentUserInfoState {
   final String code;
   final String message;
   CloudError({
@@ -19,7 +19,7 @@ class CloudError extends CloudState {
   });
 }
 
-abstract class CloudSuccess extends CloudState {
+abstract class CloudSuccess extends CurrentUserInfoState {
   final DocumentSnapshot documentSnapshot;
   CloudSuccess({@required this.documentSnapshot});
 }

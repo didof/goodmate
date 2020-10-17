@@ -1,4 +1,4 @@
-import 'package:flutter_architecture_scaffold/core/usecases/usecases_contract.dart';
+import 'package:flutter_architecture_scaffold/core/globals/usecases_contract.dart';
 import 'package:meta/meta.dart';
 
 abstract class AuthenticationParams extends Params {

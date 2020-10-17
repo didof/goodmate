@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 extension StringMethods on String {
   String selectStrBefore(String cuttingPoint) {
     return this.substring(0, this.indexOf(cuttingPoint));

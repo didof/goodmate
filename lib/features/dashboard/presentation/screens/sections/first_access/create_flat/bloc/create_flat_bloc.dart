@@ -22,40 +22,46 @@ class CreateFlatBloc extends Bloc<CreateFlatEvent, CreateFlatState> {
           yield CreateFlatFirst(
             focusOn: FocusOn.Name,
             enabled: [Enabled.Name],
+            closeSoftKeyboard: false,
+            fabDestinationStep: Step.None,
+            requestFocus: true,
           );
         } else {
           yield CreateFlatFirst(
             focusOn: FocusOn.PartyLength,
-            enabled: [
-              Enabled.Name,
-              Enabled.PartyLength,
-            ],
+            enabled: [Enabled.Name, Enabled.PartyLength],
             closeSoftKeyboard: true,
+            fabDestinationStep: Step.None,
+            requestFocus: true,
           );
         }
       } else if (event is TriggerPartyLengthChoosen) {
         yield CreateFlatFirst(
-          enabled: [
-            Enabled.Name,
-            Enabled.PartyLength,
-          ],
-          fabSendTo: Step.Second,
+          focusOn: FocusOn.None,
+          enabled: [Enabled.Name, Enabled.PartyLength],
+          closeSoftKeyboard: true,
+          fabDestinationStep: Step.Second,
+          requestFocus: true,
         );
       }
     } else if (event is CreateFlatShift) {
       if (event is TriggerShiftToStep) {
         switch (event.step) {
-          case Step.None:
-            // do nothing
-            break;
           case Step.First:
             // TODO implement
             break;
           case Step.Second:
-            yield CreateFlatSecond(shiftTo: Step.Second);
+            yield CreateFlatSecond(
+              requestFocus: true,
+            );
             break;
           case Step.Third:
             // TODO implement
+            break;
+          case Step.None:
+          default:
+            print('[TriggerShiftToStep] called with step:{${event.step}}');
+            // do nothing
             break;
         }
       }

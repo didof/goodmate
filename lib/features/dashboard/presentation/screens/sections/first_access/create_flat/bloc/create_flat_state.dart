@@ -7,14 +7,14 @@ abstract class CreateFlatPageState extends CreateFlatState {
   final FocusOn focusOn;
   final List<Enabled> enabled;
   final bool closeSoftKeyboard;
-  final Step fabSendTo;
-  final Step shiftTo;
+  final Step fabDestinationStep;
+  final bool requestFocus;
   CreateFlatPageState({
     this.focusOn,
     this.enabled,
     this.closeSoftKeyboard = false,
-    this.fabSendTo,
-    this.shiftTo,
+    this.fabDestinationStep = Step.None,
+    this.requestFocus = false,
   });
 }
 
@@ -22,18 +22,22 @@ class CreateFlatFirst extends CreateFlatPageState {
   final FocusOn focusOn;
   final List<Enabled> enabled;
   final bool closeSoftKeyboard;
-  final Step fabSendTo;
+  final Step fabDestinationStep;
+  final bool requestFocus;
   CreateFlatFirst({
     this.focusOn = FocusOn.None,
     this.enabled,
     this.closeSoftKeyboard = false,
-    this.fabSendTo,
+    this.fabDestinationStep = Step.None,
+    this.requestFocus = false,
   });
 }
 
 class CreateFlatSecond extends CreateFlatPageState {
-  final Step shiftTo;
-  CreateFlatSecond({this.shiftTo});
+  final bool requestFocus;
+  CreateFlatSecond({
+    this.requestFocus,
+  });
 }
 
 class CreateFlatThird extends CreateFlatPageState {}

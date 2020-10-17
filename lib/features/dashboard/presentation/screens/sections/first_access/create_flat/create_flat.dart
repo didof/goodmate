@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/bloc_providers_methods.dart';
+import 'package:flutter_architecture_scaffold/core/utils/bloc_dispatchers.dart';
 import 'package:flutter_architecture_scaffold/core/utils/focus_nodes_methods.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/bloc/create_flat_bloc.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/bloc/create_flat_bloc_pack.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/bloc/create_flat_bloc_widgets.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/steps/first_step.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/steps/second_step.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/steps/third_step.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:flutter_architecture_scaffold/core/utils/extensions_methods.dart';
+import 'package:flutter_architecture_scaffold/core/utils/extensions.dart';
 
 enum FocusOn {
   None,
@@ -97,7 +97,7 @@ class _CreateFlatState extends State<CreateFlat> {
         break;
     }
     if (state.closeSoftKeyboard) FocusScope.of(context).unfocus();
-    if (state.shiftTo != null) _shiftTo(state.shiftTo, _pageController);
+    if (state.requestFocus) _shiftTo(state.fabDestinationStep, _pageController);
   }
 
   @override
@@ -124,7 +124,7 @@ class _CreateFlatState extends State<CreateFlat> {
         ),
         floatingActionButton: CreateFlatBuilder(
           builder: (context, state) {
-            if (state.fabSendTo == Step.None)
+            if (state.fabDestinationStep == Step.None)
               return Container(width: 0, height: 0);
             return FloatingActionButton(
               child: const Icon(Icons.keyboard_arrow_down),
@@ -133,7 +133,7 @@ class _CreateFlatState extends State<CreateFlat> {
               onPressed: () {
                 dispatchCreateFlatEvent(
                   context: context,
-                  event: TriggerShiftToStep(state.fabSendTo),
+                  event: TriggerShiftToStep(state.fabDestinationStep),
                 );
               },
             );
@@ -157,6 +157,9 @@ void _shiftTo(Step step, PageController pageController) {
     case Step.Third:
       index = 2;
       break;
+    case Step.None:
+    default:
+      return;
   }
 
   pageController.animateToPage(

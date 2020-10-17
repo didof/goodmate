@@ -2,13 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_architecture_scaffold/core/globals/cloud_collections_names.dart';
 import 'package:meta/meta.dart';
 
-abstract class CloudDatasourceContract {
+abstract class CurrentUserInfoDatasourceContract {
   Future retrieveUser(String id);
 }
 
-class CloudDatasourceRemote extends CloudDatasourceContract {
+class CurrentUserInfoDatasourceRemote
+    extends CurrentUserInfoDatasourceContract {
   final FirebaseFirestore firebaseCloudInstance;
-  CloudDatasourceRemote({
+  CurrentUserInfoDatasourceRemote({
     @required this.firebaseCloudInstance,
   });
 

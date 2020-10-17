@@ -26,6 +26,4 @@ void replaceTo(
   );
 }
 
-
-
 // TODO apply different animations to different methods

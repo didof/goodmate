@@ -12,8 +12,9 @@ import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/au
 import 'package:flutter_architecture_scaffold/features/dashboard/data/datasource.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/data/repository_impl.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/domain/repository_contract.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_retrieve_user.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/bloc/cloud_bloc.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_retrieve_user_from_cloud.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_retrieve_user_from_memory.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/bloc/current_user_info_bloc.dart';
 import 'package:get_it/get_it.dart';
 
 final sl = GetIt.instance;
@@ -28,8 +29,9 @@ Future<void> setup() async {
   });
 
   sl.registerFactory(() {
-    return CloudBloc(
-      useRetrieveUser: sl(),
+    return CurrentUserInfoBloc(
+      useRetrieveUserFromCloud: sl(),
+      useRetrieveUserFromMemory: sl(),
     );
   });
 
@@ -43,7 +45,10 @@ Future<void> setup() async {
     return UseSignOut(repository: sl());
   });
   sl.registerLazySingleton(() {
-    return UseRetrieveUser(repository: sl());
+    return UseRetrieveUserFromCloud(repository: sl());
+  });
+  sl.registerLazySingleton(() {
+    return UseRetrieveUserFromMemory(repository: sl());
   });
 
   sl.registerLazySingleton<AuthenticationRepositoryContract>(() {
@@ -52,8 +57,8 @@ Future<void> setup() async {
       networkInfoImpl: sl(),
     );
   });
-  sl.registerLazySingleton<CloudRepositoryContract>(() {
-    return CloudRepositoryImpl(datasource: sl());
+  sl.registerLazySingleton<CurrentUserInfoRepositoryContract>(() {
+    return CurrentUserInfoRepositoryImpl(datasource: sl());
   });
 
   sl.registerLazySingleton<AuthenticationDatasourceContract>(() {
@@ -62,8 +67,8 @@ Future<void> setup() async {
       firebaseCloudInstance: sl(),
     );
   });
-  sl.registerLazySingleton<CloudDatasourceContract>(() {
-    return CloudDatasourceRemote(firebaseCloudInstance: sl());
+  sl.registerLazySingleton<CurrentUserInfoDatasourceContract>(() {
+    return CurrentUserInfoDatasourceRemote(firebaseCloudInstance: sl());
   });
 
   sl.registerLazySingleton<NetworkInfoContract>(() {
