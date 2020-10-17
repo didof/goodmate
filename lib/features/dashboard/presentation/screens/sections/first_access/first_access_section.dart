@@ -1,7 +1,6 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/utils/navigator_methods.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/create_flat.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/create_flat_section.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/join_flat.dart';
 
 class FirstAccessSection extends StatefulWidget {
@@ -90,9 +89,9 @@ class _CreateFlatLander extends StatelessWidget {
           const Text('Create a Flat'),
           const Text('[Explain]'),
           FlatButton.icon(
-            onPressed: () => pushTo(context, screen: CreateFlat()),
+            onPressed: () => pushTo(context, screen: CreateFlatSection()),
             icon: const Icon(Icons.home),
-            label: const Text('Create'),
+            label: const Text('Start'),
           ),
         ],
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/bloc/current_user_info_bloc.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/checkers.dart';
 
 showErrorSnackbarFromAuthenticationErrorState({
   @required BuildContext context,
@@ -40,4 +41,17 @@ showErrorSnackbarFromCloudErrorState({
   print('showErrorSnackbarFromCloudErrorState:${state.code} - implement me');
   Future.delayed(doExecAfter, exec);
   return scaffoldState.showSnackBar(snackbar);
+}
+
+throwInfoSnackbar(
+  BuildContext context, {
+  @required String message,
+}) async {
+  final snackbar = SnackBar(
+    content: Text(message),
+    duration: Duration(seconds: 3),
+    backgroundColor: Theme.of(context).errorColor,
+  );
+
+  Scaffold.of(context).showSnackBar(snackbar);
 }
