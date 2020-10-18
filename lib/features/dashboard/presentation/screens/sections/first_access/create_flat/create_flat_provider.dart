@@ -11,9 +11,15 @@ Either<InvalidField, SecretKeyType> generateRandomSecretKey() {
   return right(SecretKeyType(value: 'shhhhh'));
 }
 
+Either<InvalidField, PartyLengthType> generateRandomPartyLength() {
+  return right(PartyLengthType(value: 3));
+}
+
 class CreateFlatProvider with ChangeNotifier {
   Either<InvalidField, FlatNameType> flatName = generateRandomFlatName();
   Either<InvalidField, SecretKeyType> secretKey = generateRandomSecretKey();
+  Either<InvalidField, PartyLengthType> partyLength =
+      generateRandomPartyLength();
 
   setFlatName(String str) {
     flatName = validateFlatName(str);
@@ -24,6 +30,14 @@ class CreateFlatProvider with ChangeNotifier {
     secretKey = validateSecretKey(str);
     notifyListeners();
   }
+
+  setPartyLength(double number) {
+    partyLength = right(PartyLengthType(value: number));
+    notifyListeners();
+  }
+
+  List<Either<InvalidField, FieldType>> get props =>
+      [flatName, secretKey, partyLength];
 }
 
 class InvalidField {

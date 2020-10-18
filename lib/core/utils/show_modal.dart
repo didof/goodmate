@@ -13,31 +13,11 @@ Future showModalWithSingleTextField(
     builder: (context) {
       String str;
       return AlertDialog(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(title),
-            IconButton(
-              color: theme.errorColor,
-              icon: const Icon(Icons.close),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        ),
+        title: TitleWithDismissable(title, theme: theme),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (explanation != null && explanation.isNotEmpty)
-                Text(explanation),
-              if (errorMessage != null)
-                Container(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    errorMessage,
-                    style: TextStyle(color: theme.errorColor),
-                  ),
-                ),
               TextField(
                 decoration: InputDecoration(labelText: labelText),
                 autofocus: true,
@@ -45,6 +25,14 @@ Future showModalWithSingleTextField(
                   str = value;
                 },
               ),
+              if (explanation != null && explanation.isNotEmpty)
+                Text(explanation),
+              if (errorMessage != null)
+                EnphasisBox(
+                  errorMessage,
+                  theme: theme,
+                  enphasis: Enphasis.Error,
+                ),
             ],
           ),
         ),
@@ -72,4 +60,89 @@ Future showModalWithSingleTextField(
 
 String generateRandomFlatName() {
   return 'fancy name';
+}
+
+Future showModalInfo(
+  BuildContext context, {
+  String title = "Some info",
+  List<String> infos = const [],
+}) async {
+  final ThemeData theme = Theme.of(context);
+  return await showDialog(
+    context: context,
+    child: SimpleDialog(
+        title: TitleWithDismissable(title, theme: theme),
+        titlePadding:
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4.0),
+        children: infos
+            .map((info) => EnphasisBox(
+                  info,
+                  enphasis: Enphasis.Info,
+                  theme: theme,
+                ))
+            .toList()),
+  );
+}
+
+class TitleWithDismissable extends StatelessWidget {
+  final ThemeData theme;
+  final String title;
+  TitleWithDismissable(this.title, {@required this.theme});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title),
+        IconButton(
+          color: theme.errorColor,
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
+    );
+  }
+}
+
+enum Enphasis {
+  Info,
+  Error,
+}
+
+class EnphasisBox extends StatelessWidget {
+  final String str;
+  final Enphasis enphasis;
+  final ThemeData theme;
+  EnphasisBox(
+    this.str, {
+    this.enphasis = Enphasis.Info,
+    @required this.theme,
+  });
+
+  Color pickEnphasisColor() {
+    switch (enphasis) {
+      case Enphasis.Info:
+        return theme.primaryColor;
+      case Enphasis.Error:
+      default:
+        return theme.errorColor;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(color: pickEnphasisColor(), width: 3.0),
+        ),
+      ),
+      padding: const EdgeInsets.all(16.0),
+      margin: const EdgeInsets.only(bottom: 8.0),
+      child: Text(str),
+    );
+  }
 }

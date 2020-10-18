@@ -1,16 +1,31 @@
 import 'package:meta/meta.dart';
 
 abstract class FieldType {
-  final String value;
+  final dynamic value;
   FieldType({@required this.value});
 }
 
-class FlatNameType extends FieldType {
+abstract class StringFieldType extends FieldType {
   final String value;
-  FlatNameType({this.value});
+  StringFieldType({@required this.value});
 }
 
-class SecretKeyType extends FieldType {
+abstract class DoubleFieldType extends FieldType {
+  final double value;
+  DoubleFieldType({@required this.value});
+}
+
+class FlatNameType extends StringFieldType {
   final String value;
-  SecretKeyType({this.value});
+  FlatNameType({@required this.value});
+}
+
+class SecretKeyType extends StringFieldType {
+  final String value;
+  SecretKeyType({@required this.value});
+}
+
+class PartyLengthType extends DoubleFieldType {
+  final double value;
+  PartyLengthType({@required this.value});
 }

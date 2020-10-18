@@ -6,39 +6,24 @@ import 'package:flutter_architecture_scaffold/features/dashboard/presentation/sc
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/displayers.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/fieldTile.dart';
 
-class FlatName extends StatelessWidget {
+class PartyLength extends StatelessWidget {
   final CreateFlatProvider provider;
-  FlatName(this.provider);
+  PartyLength(this.provider);
 
-  void _buildModal(
-    BuildContext context,
-    CreateFlatProvider provider, {
-    String errorMessage,
-  }) {
-    showModalWithSingleTextField(
-      context,
-      labelText: 'Flat name',
-      title: 'Pick a Name for the Flat',
-      explanation: 'Choose a name that will identify your flat.',
-      errorMessage: errorMessage,
-    ).then((value) => provider.setFlatName(value));
+  void _buildModal(BuildContext context) {
+    showModalInfo(context, infos: [
+      'You have to set a fixed amount of persons that will be able to access the Flat you are creating',
+      'In future it will be added the possibility to extend the maximum number. To this day, it is fixed to 5 for database capacity limits.'
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return FieldTile(
-      label: 'flat name',
-      displayer: FlatNameDisplayer(),
-      checker: FlatnameChecker(
-        fixErrorFunction: (errMsg) => _buildModal(
-          context,
-          provider,
-          errorMessage: errMsg,
-        ),
-      ),
-      action: FlatNameActioner(
-        builder: (previousValue) => _buildModal(context, provider),
-      ),
+      label: 'party length',
+      displayer: PartyLengthDisplayer(),
+      checker: PartyLengthChecker(moreInfoFunction: _buildModal),
+      action: PartyLengthActioner(() {}),
     );
   }
 }

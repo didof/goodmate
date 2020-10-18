@@ -37,7 +37,7 @@ class SecretKey extends StatelessWidget {
           errorMessage: errMsg,
         ),
       ),
-      action: SecretKeyAction(
+      action: SecretKeyActioner(
         builder: (previousValue) => _buildModal(context, provider),
       ),
     );

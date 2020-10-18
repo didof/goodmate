@@ -1,3 +1,4 @@
+import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/create_flat_provider.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/field_types.dart';
@@ -7,14 +8,22 @@ typedef WithPreviousValueBuilder = Function(
   String previousValue,
 );
 
-abstract class Actioner<FieldType> extends StatelessWidget {
+abstract class Actioner<FieldType> extends StatelessWidget {}
+
+abstract class ActionerWithPrevious<FieldType> extends Actioner<FieldType> {
   final WithPreviousValueBuilder withPreviousValueBuilder;
-  Actioner(this.withPreviousValueBuilder);
+  ActionerWithPrevious(this.withPreviousValueBuilder);
 }
 
-class FlatNameAction extends Actioner<FlatNameType> {
+abstract class ActionerWithGenericFunction<FieldType>
+    extends Actioner<FieldType> {
+  final Function function;
+  ActionerWithGenericFunction(this.function);
+}
+
+class FlatNameActioner extends ActionerWithPrevious<FlatNameType> {
   final WithPreviousValueBuilder withPreviousValueBuilder;
-  FlatNameAction({@required WithPreviousValueBuilder builder})
+  FlatNameActioner({@required WithPreviousValueBuilder builder})
       : withPreviousValueBuilder = builder,
         super(builder);
 
@@ -26,7 +35,7 @@ class FlatNameAction extends Actioner<FlatNameType> {
       child: IconButton(
         color: theme.accentColor,
         splashColor: theme.primaryColor,
-        icon: Icon(Icons.edit),
+        icon: Icon(Icons.label),
         onPressed: () {
           return withPreviousValueBuilder(
             value.fold((l) => l.invalidValue, (r) => r.value),
@@ -37,9 +46,9 @@ class FlatNameAction extends Actioner<FlatNameType> {
   }
 }
 
-class SecretKeyAction extends Actioner<SecretKeyType> {
+class SecretKeyActioner extends ActionerWithPrevious<SecretKeyType> {
   final WithPreviousValueBuilder withPreviousValueBuilder;
-  SecretKeyAction({@required WithPreviousValueBuilder builder})
+  SecretKeyActioner({@required WithPreviousValueBuilder builder})
       : withPreviousValueBuilder = builder,
         super(builder);
 
@@ -51,7 +60,7 @@ class SecretKeyAction extends Actioner<SecretKeyType> {
       child: IconButton(
         color: theme.accentColor,
         splashColor: theme.primaryColor,
-        icon: Icon(Icons.edit),
+        icon: Icon(Icons.vpn_key),
         onPressed: () {
           return withPreviousValueBuilder(
             value.fold((l) => l.invalidValue, (r) => r.value),
@@ -59,5 +68,70 @@ class SecretKeyAction extends Actioner<SecretKeyType> {
         },
       ),
     );
+  }
+}
+
+class PartyLengthActioner extends ActionerWithGenericFunction<PartyLengthType> {
+  PartyLengthActioner(Function function) : super(function);
+
+  @override
+  Widget build(BuildContext context) {
+    final value = Provider.of<CreateFlatProvider>(context).partyLength;
+    final ThemeData theme = Theme.of(context);
+    return CircleAvatar(
+      backgroundColor: theme.primaryColor,
+      child: BadgePersons(value, theme: theme),
+    );
+  }
+}
+
+class BadgePersons extends StatelessWidget {
+  final Either<InvalidField, PartyLengthType> value;
+  final ThemeData theme;
+  final double hideBadgeAt;
+  BadgePersons(
+    this.value, {
+    @required this.theme,
+    this.hideBadgeAt = 2,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return value.fold((l) {
+      return const Icon(Icons.error_outline);
+    }, (r) {
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          return Stack(
+            children: [
+              CircleAvatar(
+                backgroundColor: theme.primaryColor,
+                child: const Icon(
+                  Icons.people_outline,
+                ),
+              ),
+              if (r.value > hideBadgeAt)
+                Positioned(
+                  top: 0,
+                  right: 0,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15.0),
+                      color: theme.accentColor,
+                    ),
+                    width: constraints.maxWidth / 2,
+                    height: constraints.maxHeight / 2,
+                    child: Text(
+                      r.value.round().toString(),
+                      style: TextStyle(color: Colors.black),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+            ],
+          );
+        },
+      );
+    });
   }
 }

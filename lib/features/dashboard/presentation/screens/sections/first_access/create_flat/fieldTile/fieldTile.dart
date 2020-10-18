@@ -10,14 +10,15 @@ class FieldTile extends StatelessWidget {
   final String label;
   const FieldTile({
     @required this.displayer,
-    @required this.checker,
-    @required this.action,
+    this.checker,
+    this.action,
     @required this.label,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 16.0),
       child: ListTile(
         title: displayer,
         leading: action,

@@ -34,9 +34,7 @@ class FlatnameChecker extends Checker<FlatNameType> {
         );
       },
       (r) {
-        return const Icon(
-          Icons.check_circle_outline,
-        );
+        return const Icon(Icons.check_circle_outline);
       },
     );
   }
@@ -67,6 +65,21 @@ class SecretKeyChecker extends Checker<SecretKeyType> {
           Icons.check_circle_outline,
         );
       },
+    );
+  }
+}
+
+class PartyLengthChecker extends Checker<PartyLengthType> {
+  final Function(BuildContext context) moreInfoFunction;
+  PartyLengthChecker({@required this.moreInfoFunction});
+
+  @override
+  Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    return IconButton(
+      color: theme.primaryColor,
+      icon: Icon(Icons.info_outline),
+      onPressed: () => moreInfoFunction(context),
     );
   }
 }
