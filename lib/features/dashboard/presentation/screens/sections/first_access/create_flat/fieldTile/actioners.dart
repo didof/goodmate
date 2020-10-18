@@ -1,8 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/create_flat_provider.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/field_types.dart';
-import 'package:provider/provider.dart';
 
 typedef WithPreviousValueBuilder = Function(
   String previousValue,
@@ -133,5 +134,22 @@ class BadgePersons extends StatelessWidget {
         },
       );
     });
+  }
+}
+
+// TODO build its own actioner specific
+class WantedFeatureActioner extends Actioner<WantedFeatureType> {
+  final ThemeData theme;
+  WantedFeatureActioner({@required this.theme});
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      backgroundColor: theme.primaryColor,
+      child: IconButton(
+        icon: const Icon(Icons.dashboard),
+        onPressed: () => print('show modal with more extensive explanation'),
+      ),
+    );
   }
 }

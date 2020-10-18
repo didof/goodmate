@@ -4,6 +4,7 @@ import 'package:flutter_architecture_scaffold/features/dashboard/presentation/sc
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/section/flatName.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/section/partyLength.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/section/secretKey.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/section/wantedFeatures.dart';
 import 'package:flutter_architecture_scaffold/widgets/sectionTitle.dart';
 
 class CreateFlatSection extends StatelessWidget {
@@ -20,6 +21,7 @@ class CreateFlatSection extends StatelessWidget {
             FlatName(provider),
             SecretKey(provider),
             PartyLength(provider),
+            WantedFeatures(provider),
           ],
         );
       }),

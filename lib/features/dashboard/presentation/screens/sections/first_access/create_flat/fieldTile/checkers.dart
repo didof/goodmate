@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/create_flat_provider.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/field_types.dart';
-import 'package:provider/provider.dart';
 
 typedef ErrorFunction = Function(
   String errorMessage,
@@ -33,9 +33,7 @@ class FlatnameChecker extends Checker<FlatNameType> {
           tooltip: l.message.toString(),
         );
       },
-      (r) {
-        return const Icon(Icons.check_circle_outline);
-      },
+      (r) => const CorrectIcon(),
     );
   }
 }
@@ -60,11 +58,7 @@ class SecretKeyChecker extends Checker<SecretKeyType> {
           tooltip: l.message.toString(),
         );
       },
-      (r) {
-        return const Icon(
-          Icons.check_circle_outline,
-        );
-      },
+      (r) => const CorrectIcon(),
     );
   }
 }
@@ -80,6 +74,42 @@ class PartyLengthChecker extends Checker<PartyLengthType> {
       color: theme.primaryColor,
       icon: Icon(Icons.info_outline),
       onPressed: () => moreInfoFunction(context),
+    );
+  }
+}
+
+class WantedFeatureChecker extends Checker<WantedFeatureType> {
+  final ThemeData theme;
+  final CreateFlatProvider provider;
+  WantedFeatureChecker({
+    @required this.theme,
+    @required this.provider,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return provider.wantedFeatures.fold(
+      (l) {
+        return IconButton(
+          color: theme.errorColor,
+          splashColor: theme.accentColor,
+          icon: Icon(Icons.error_outline),
+          onPressed: () => provider.setWantedFeatures(0),
+          tooltip: l.message.toString(),
+        );
+      },
+      (r) => const CorrectIcon(),
+    );
+  }
+}
+
+class CorrectIcon extends StatelessWidget {
+  const CorrectIcon();
+  @override
+  Widget build(BuildContext context) {
+    return const Icon(
+      Icons.check_circle_outline,
+      color: Colors.green,
     );
   }
 }

@@ -11,15 +11,27 @@ Either<InvalidField, SecretKeyType> generateRandomSecretKey() {
   return right(SecretKeyType(value: 'shhhhh'));
 }
 
-Either<InvalidField, PartyLengthType> generateRandomPartyLength() {
-  return right(PartyLengthType(value: 3));
+Either<InvalidField, PartyLengthType> generatePartyLength({
+  double initialValue = 3.0,
+}) {
+  return right(PartyLengthType(value: initialValue));
+}
+
+Either<InvalidField, WantedFeatureType> generateWantedFeatures() {
+  var list = List.generate(3, (index) {
+    if (index == 0) return true;
+    return false;
+  });
+
+  return Right(WantedFeatureType(values: list));
 }
 
 class CreateFlatProvider with ChangeNotifier {
   Either<InvalidField, FlatNameType> flatName = generateRandomFlatName();
   Either<InvalidField, SecretKeyType> secretKey = generateRandomSecretKey();
-  Either<InvalidField, PartyLengthType> partyLength =
-      generateRandomPartyLength();
+  Either<InvalidField, PartyLengthType> partyLength = generatePartyLength();
+  Either<InvalidField, WantedFeatureType> wantedFeatures =
+      generateWantedFeatures();
 
   setFlatName(String str) {
     flatName = validateFlatName(str);
@@ -36,8 +48,22 @@ class CreateFlatProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  setWantedFeatures(int index) {
+    print(index);
+    wantedFeatures =
+        validateWantedFeatures(index, list: [...wantedFeaturesList]);
+    notifyListeners();
+  }
+
+  // getters
   List<Either<InvalidField, FieldType>> get props =>
       [flatName, secretKey, partyLength];
+
+  List<bool> get wantedFeaturesList => [
+        ...wantedFeatures.fold((_) => List.generate(3, (_) => false), (r) {
+          return r.values;
+        })
+      ];
 }
 
 class InvalidField {
@@ -47,7 +73,7 @@ class InvalidField {
   InvalidField(
     this.message, {
     this.shortMessage = 'required',
-    @required this.invalidValue,
+    this.invalidValue,
   });
 }
 
@@ -87,6 +113,16 @@ Either<InvalidField, SecretKeyType> validateSecretKey(String str) {
       invalidValue: str,
     ));
   return right(SecretKeyType(value: str));
+}
+
+Either<InvalidField, WantedFeatureType> validateWantedFeatures(
+  int index, {
+  @required List<bool> list,
+}) {
+  list[index] = !list[index];
+  if (list.every((element) => element == false))
+    return left(InvalidField('you must pick at least one feature'));
+  return right(WantedFeatureType(values: list));
 }
 
 typedef AccessibleProvider = Widget Function(
