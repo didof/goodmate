@@ -27,7 +27,7 @@ class WantedFeaturesDisplayer extends ListOfBoolDisplayer<WantedFeatureType> {
           provider,
           theme,
           children: WantedFeatures.features,
-          isSelected: r.values,
+          isSelected: r.value,
         );
       },
     );

@@ -11,11 +11,14 @@ class InvalidField {
   });
 }
 
-abstract class FieldType {}
+abstract class FieldType {
+  final dynamic value;
+  const FieldType({@required this.value});
+}
 
 abstract class StringFieldType extends FieldType {
   final String value;
-  StringFieldType({@required this.value});
+  const StringFieldType({@required this.value});
 }
 
 abstract class DoubleFieldType extends FieldType {
@@ -44,6 +47,6 @@ class PartyLengthType extends DoubleFieldType {
 }
 
 class WantedFeatureType extends ListFieldType<bool> {
-  final List<bool> values;
-  WantedFeatureType({@required this.values});
+  final List<bool> value;
+  WantedFeatureType({@required this.value});
 }
