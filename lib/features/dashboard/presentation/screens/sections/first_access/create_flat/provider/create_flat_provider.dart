@@ -2,21 +2,25 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/entities.dart';
 
-Either<InvalidField, FlatNameType> generateRandomFlatName() {
-  return right(FlatNameType(value: 'myRandomFlat'));
+String generateFlatName() {
+  return 'myRandomFlat';
 }
 
-Either<InvalidField, SecretKeyType> generateRandomSecretKey() {
+Either<InvalidField, FlatNameType> generateRandomFlatNameInstance() {
+  return right(FlatNameType(value: generateFlatName()));
+}
+
+Either<InvalidField, SecretKeyType> generateRandomSecretKeyInstance() {
   return right(SecretKeyType(value: 'shhhhh'));
 }
 
-Either<InvalidField, PartyLengthType> generatePartyLength({
+Either<InvalidField, PartyLengthType> generatePartyLengthInstance({
   double initialValue = 3.0,
 }) {
   return right(PartyLengthType(value: initialValue));
 }
 
-Either<InvalidField, WantedFeatureType> generateWantedFeatures() {
+Either<InvalidField, WantedFeatureType> generateWantedFeaturesInstance() {
   var list = List.generate(3, (index) {
     if (index == 0) return true;
     return false;
@@ -26,11 +30,14 @@ Either<InvalidField, WantedFeatureType> generateWantedFeatures() {
 }
 
 class CreateFlatProvider with ChangeNotifier {
-  Either<InvalidField, FlatNameType> flatName = generateRandomFlatName();
-  Either<InvalidField, SecretKeyType> secretKey = generateRandomSecretKey();
-  Either<InvalidField, PartyLengthType> partyLength = generatePartyLength();
+  Either<InvalidField, FlatNameType> flatName =
+      generateRandomFlatNameInstance();
+  Either<InvalidField, SecretKeyType> secretKey =
+      generateRandomSecretKeyInstance();
+  Either<InvalidField, PartyLengthType> partyLength =
+      generatePartyLengthInstance();
   Either<InvalidField, WantedFeatureType> wantedFeatures =
-      generateWantedFeatures();
+      generateWantedFeaturesInstance();
 
   setFlatName(String str) {
     flatName = validateFlatName(str);
@@ -77,9 +84,9 @@ Either<InvalidField, FlatNameType> validateFlatName(String str) {
       'The name must be at least 4 characters',
       invalidValue: str,
     ));
-  if (str.length > 10)
+  if (str.length > 20)
     return left(InvalidField(
-      'The name must be less than 10 characters',
+      'The name must be less than 20 characters',
       invalidValue: str,
     ));
   return right(FlatNameType(value: str));

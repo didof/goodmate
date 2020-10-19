@@ -32,13 +32,16 @@ class FlatName extends StatelessWidget {
       builder: (context, provider, child, theme) {
         return FieldTile(
           label: 'flat name',
+          action: FlatNameActioner(
+            action: (previousValue) {
+              print(previousValue);
+              _buildModal(context, provider, theme);
+            },
+          ),
           displayer: FlatNameDisplayer(),
           checker: FlatnameChecker(
             fixErrorFunction: (errMsg) =>
                 _buildModal(context, provider, theme, errorMessage: errMsg),
-          ),
-          action: FlatNameActioner(
-            action: (previousValue) => _buildModal(context, provider, theme),
           ),
         );
       },

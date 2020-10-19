@@ -11,7 +11,7 @@ Future showModalWithSingleTextField(
   String labelText = 'fill here',
   String errorMessage,
 }) async {
-  await showDialog(
+  return await showDialog(
     context: context,
     builder: (context) {
       String str;
@@ -26,6 +26,7 @@ Future showModalWithSingleTextField(
                 autofocus: true,
                 onChanged: (value) {
                   str = value;
+                  print(str);
                 },
               ),
               if (explanation != null && explanation.isNotEmpty)
@@ -44,8 +45,7 @@ Future showModalWithSingleTextField(
             icon: const Icon(Icons.cake),
             color: theme.accentColor,
             splashColor: theme.primaryColor,
-            onPressed: () =>
-                Navigator.of(context).pop(generateRandomFlatName()),
+            onPressed: () => Navigator.of(context).pop(generateFlatName()),
           ),
           OutlineButton.icon(
             icon: const Icon(Icons.check),

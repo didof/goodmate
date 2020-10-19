@@ -6,5 +6,5 @@ typedef ErrorFunction = Function(
 
 abstract class Checker<FieldType> extends StatelessWidget {
   final ErrorFunction fixErrorFunction;
-  Checker({@required this.fixErrorFunction});
+  const Checker({@required this.fixErrorFunction});
 }

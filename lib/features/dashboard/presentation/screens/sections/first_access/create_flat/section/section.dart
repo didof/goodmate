@@ -27,7 +27,6 @@ class CreateFlatSection extends StatelessWidget {
             SecretKey(),
             PartyLength(),
             WantedFeatures(),
-            // Feature(Features.Chat, provider: provider),
           ],
         ),
       ),

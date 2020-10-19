@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/actioners/contracts.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/create_flat_provider.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/create_flat_provider_widgets.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/entities.dart';
 
@@ -22,7 +21,10 @@ class FlatNameActioner extends ActionerWithPrevious<FlatNameType> {
             icon: Icon(Icons.label),
             onPressed: () {
               return withPreviousValueBuilder(
-                provider.flatName.fold((l) => l.invalidValue, (r) => r.value),
+                provider.flatName.fold(
+                  (l) => l.invalidValue,
+                  (r) => r.value,
+                ),
               );
             },
           ),
