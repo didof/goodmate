@@ -1,4 +1,5 @@
 import 'package:crypto/crypto.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/entities/collection_reference.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -7,6 +8,8 @@ class Features {
   final bool cleaningSchedule;
   final bool groceryShopping;
   const Features({this.chat, this.cleaningSchedule, this.groceryShopping});
+
+  List<bool> get props => [chat, cleaningSchedule, groceryShopping];
 }
 
 class CreateFlatParameters {
@@ -37,6 +40,28 @@ class CreateFlatParameters {
       partyLength: partyLength,
       features: transformFeatures(features),
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'adminUid': adminUid,
+      'flatName': flatName,
+      'secretKey': secretKey,
+      'partyLength': partyLength,
+      'features': _generateFeaturesMap(features.props),
+    };
+  }
+
+  Map<String, String> _generateFeaturesMap(List<bool> list) {
+    Map<String, String> map = {};
+    if (list[0]) map.putIfAbsent('chat', () => ChatUid.generate().uid);
+    if (list[1])
+      map.putIfAbsent(
+          'shopping_schedule', () => GroceryShoppingUid.generate().uid);
+    if (list[2])
+      map.putIfAbsent(
+          'grocery_shopping', () => GroceryShoppingUid.generate().uid);
+    return map;
   }
 }
 

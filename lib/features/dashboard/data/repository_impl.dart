@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
-import 'package:flutter_architecture_scaffold/core/sql/current_user_info.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/entities/create_flat_parameters.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/domain/entities/current_user_info.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/data/datasource.dart';
@@ -12,8 +12,9 @@ class CurrentUserInfoRepositoryImpl extends CurrentUserInfoRepositoryContract {
   CurrentUserInfoRepositoryImpl({@required this.datasource});
 
   @override
-  Future<Either<Failure, DocumentSnapshot>> retrieveUserFromCloud(
-      {@required String id}) async {
+  Future<Either<CloudFailure, DocumentSnapshot>> retrieveUserFromCloud({
+    @required String id,
+  }) async {
     try {
       final DocumentSnapshot documentSnapshot =
           await datasource.retrieveUser(id);
@@ -35,5 +36,39 @@ class CurrentUserInfoRepositoryImpl extends CurrentUserInfoRepositoryContract {
     String id,
   }) async {
     //TODO get from local
+  }
+
+  @override
+  Future<Either<CloudFailure, DocumentReference>> createFlat({
+    CreateFlatParameters parameters,
+  }) async {
+    try {
+      final documentReference = await datasource.createFlat(parameters);
+      return right(documentReference);
+    } catch (e) {
+      print(e);
+      return left(
+        CreateFlatFailure(
+            code: 'error-during-create-flat',
+            message: 'Something went wrong during the creation of the flat'),
+      );
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateUser({
+    @required String uid,
+    @required String flatUid,
+  }) async {
+    try {
+      final response = await datasource.updateUser(uid, flatUid);
+      return right(response);
+    } catch (e) {
+      print(e);
+      return left(UpdateUserFailure(
+        code: 'update-user-error',
+        message: 'something went wrong during the updating of the user',
+      ));
+    }
   }
 }

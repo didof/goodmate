@@ -2,7 +2,9 @@ import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/domain/entities/create_flat_parameters.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_create_flat.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_retrieve_user_from_memory.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_update_user.dart';
 import 'package:meta/meta.dart';
 
 import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
@@ -16,10 +18,14 @@ class CurrentUserInfoBloc
     extends Bloc<CurrentUserInfoEvent, CurrentUserInfoState> {
   final UseRetrieveUserFromCloud useRetrieveUserFromCloud;
   final UseRetrieveUserFromMemory useRetrieveUserFromMemory;
+  final UseCreateFlat useCreateFlat;
+  final UseUpdateUser useUpdateUser;
 
   CurrentUserInfoBloc({
     @required this.useRetrieveUserFromCloud,
     @required this.useRetrieveUserFromMemory,
+    @required this.useCreateFlat,
+    @required this.useUpdateUser,
   }) : super(CloudConnectToCloud());
 
   @override
@@ -49,15 +55,35 @@ class CurrentUserInfoBloc
         },
         (r) async* {
           if (r.data().containsKey('tenantIn')) {
-            yield CloudSuccessAndAlreadyTenantIn(documentSnapshot: r);
+            yield CloudSuccessAndAlreadyTenantIn(documentReference: null);
           } else {
             yield CloudSuccessButFirstAccess(documentSnapshot: r);
           }
         },
       );
     } else if (event is TriggerCreateFlat) {
-      yield CloudWaiting(message: 'sending request to Cloud');
-      // TODO implement create flat
+      yield CloudWaiting(message: 'sending request to Cloud ...');
+      final Either<Failure, DocumentReference> documentReference =
+          await useCreateFlat(event.parameters);
+      yield CloudWaiting(message: 'elaborating response ...');
+      yield* documentReference.fold((l) async* {
+        yield CloudError(
+          code: 'create-flat-error',
+          message: 'something went wrong during the creation on the flat',
+        );
+      }, (r) async* {
+        yield CloudWaiting(message: 'updating your profile ...');
+        await useUpdateUser(UpdateUserParams(
+          uid: event.parameters.adminUid,
+          flatUid: r.id,
+        ));
+
+        yield CloudSuccessAndAlreadyTenantIn(documentReference: r);
+      });
+
+      // TODO update user info tenantIn
+
+      // TODO yield CloudSuccessAndAlreadyTenantIn
     }
   }
 }

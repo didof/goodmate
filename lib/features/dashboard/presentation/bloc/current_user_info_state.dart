@@ -30,6 +30,6 @@ class CloudSuccessButFirstAccess extends CloudSuccess {
 }
 
 class CloudSuccessAndAlreadyTenantIn extends CloudSuccess {
-  final DocumentSnapshot documentSnapshot;
-  CloudSuccessAndAlreadyTenantIn({@required this.documentSnapshot});
+  final DocumentReference documentReference;
+  CloudSuccessAndAlreadyTenantIn({@required this.documentReference});
 }

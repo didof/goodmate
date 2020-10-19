@@ -12,8 +12,10 @@ import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/au
 import 'package:flutter_architecture_scaffold/features/dashboard/data/datasource.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/data/repository_impl.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/domain/repository_contract.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_create_flat.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_retrieve_user_from_cloud.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_retrieve_user_from_memory.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_update_user.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/bloc/current_user_info_bloc.dart';
 import 'package:get_it/get_it.dart';
 
@@ -32,6 +34,8 @@ Future<void> setup() async {
     return CurrentUserInfoBloc(
       useRetrieveUserFromCloud: sl(),
       useRetrieveUserFromMemory: sl(),
+      useCreateFlat: sl(),
+      useUpdateUser: sl(),
     );
   });
 
@@ -40,6 +44,12 @@ Future<void> setup() async {
   });
   sl.registerLazySingleton(() {
     return UseSignInUserWithEmailAndPassword(repository: sl());
+  });
+  sl.registerLazySingleton(() {
+    return UseCreateFlat(repository: sl());
+  });
+  sl.registerLazySingleton(() {
+    return UseUpdateUser(repository: sl());
   });
   sl.registerLazySingleton(() {
     return UseSignOut(repository: sl());

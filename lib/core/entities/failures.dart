@@ -35,10 +35,25 @@ class NetworkFailure extends Failure {
   NetworkFailure({@required this.code, @required this.message});
 }
 
-abstract class CloudFailure implements Failure {}
+abstract class CloudFailure extends Failure {
+  final String code;
+  final String message;
+  CloudFailure({@required this.code, @required this.message});
+}
 
 class RetrieveUserFailure extends CloudFailure {
   final String code;
   final String message;
   RetrieveUserFailure({@required this.code, @required this.message});
+}
+
+class CreateFlatFailure extends CloudFailure {
+  final String code;
+  final String message;
+  CreateFlatFailure({@required this.code, @required this.message});
+}
+class UpdateUserFailure extends CloudFailure {
+  final String code;
+  final String message;
+  UpdateUserFailure({@required this.code, @required this.message});
 }

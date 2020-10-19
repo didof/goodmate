@@ -61,7 +61,8 @@ class __ConnectingToCloudState extends State<_ConnectingToCloud> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      final String uid = Provider.of<AuthenticatedUser>(context, listen: false).uid;
+      final String uid =
+          Provider.of<AuthenticatedUser>(context, listen: false).uid;
       if (uid == null || uid.isEmpty) {
         throw UnimplementedError(
             '[DashobardScreen] this should never be thrown');
@@ -78,17 +79,19 @@ class __ConnectingToCloudState extends State<_ConnectingToCloud> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        const LinearProgressIndicator(),
-        const Expanded(
-          child: const Center(
-            child:
-                const Text('Checking if you already participate to some flat.'),
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const LinearProgressIndicator(),
+          const Expanded(
+            child: const Center(
+              child: const Text(
+                  'Checking if you already participate to some flat.'),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -98,7 +101,8 @@ class _Error extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String uid = Provider.of<AuthenticatedUser>(context, listen: false).uid;
+    final String uid =
+        Provider.of<AuthenticatedUser>(context, listen: false).uid;
     return Column(
       children: [
         Text('Something went orribly wrong.'),

@@ -1,4 +1,5 @@
 import 'package:flutter_architecture_scaffold/core/globals/usecases_contract.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/entities/create_flat_parameters.dart';
 import 'package:meta/meta.dart';
 
 abstract class AuthenticationParams extends Params {
@@ -36,4 +37,9 @@ abstract class CloudParams extends Params {
 class RetrieveUserParams extends CloudParams {
   final String id;
   RetrieveUserParams({@required this.id});
+}
+
+class CreateFlatParams extends CloudParams {
+  final CreateFlatParameters parameters;
+  CreateFlatParams({@required this.parameters});
 }

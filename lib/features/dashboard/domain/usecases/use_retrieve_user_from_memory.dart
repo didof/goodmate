@@ -5,7 +5,6 @@ import 'package:meta/meta.dart';
 import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
 import 'package:flutter_architecture_scaffold/core/entities/params.dart';
 import 'package:flutter_architecture_scaffold/core/globals/usecases_contract.dart';
-import 'package:flutter_architecture_scaffold/core/sql/current_user_info.dart';
 
 class UseRetrieveUserFromMemory
     extends UseCase<CurrentUserInfo, RetrieveUserParams> {
