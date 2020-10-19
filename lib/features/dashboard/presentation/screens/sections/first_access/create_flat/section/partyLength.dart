@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/utils/show_modal.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/create_flat_provider.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/actioners.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/checkers.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/displayers.dart';
+import 'package:flutter_architecture_scaffold/core/utils/show_modal/modal_info.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/actioners/partyLength_actioner.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/checkers/partyLength_checker.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/displayers/partyLength_displayer.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/fieldTile.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/create_flat_provider_widgets.dart';
 
 class PartyLength extends StatelessWidget {
-  final CreateFlatProvider provider;
-  PartyLength(this.provider);
+  const PartyLength();
 
   void _buildModal(BuildContext context) {
     showModalInfo(context, infos: [
@@ -19,11 +18,17 @@ class PartyLength extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FieldTile(
-      label: 'party length',
-      displayer: PartyLengthDisplayer(),
-      checker: PartyLengthChecker(moreInfoFunction: _buildModal),
-      action: PartyLengthActioner(() {}),
+    return CFC(
+      builder: (context, provider, child, theme) {
+        return FieldTile(
+          label: 'party length',
+          displayer: PartyLengthDisplayer(provider, theme),
+          checker: PartyLengthChecker(provider, theme,
+              moreInfoFunction: _buildModal),
+          //TODO implement action
+          action: PartyLengthActioner(provider, theme, action: () {}),
+        );
+      },
     );
   }
 }

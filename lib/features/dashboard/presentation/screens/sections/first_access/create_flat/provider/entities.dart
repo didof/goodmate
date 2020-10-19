@@ -1,5 +1,16 @@
 import 'package:meta/meta.dart';
 
+class InvalidField {
+  final String invalidValue;
+  final String shortMessage;
+  final String message;
+  InvalidField(
+    this.message, {
+    this.shortMessage = 'required',
+    this.invalidValue,
+  });
+}
+
 abstract class FieldType {}
 
 abstract class StringFieldType extends FieldType {

@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/create_flat_provider.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/create_flat_provider_widgets.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/section/flatName.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/section/partyLength.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/section/secretKey.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/section/wantedFeatures.dart';
 import 'package:flutter_architecture_scaffold/widgets/sectionTitle.dart';
+
+enum Features {
+  Chat,
+  CleaningSchedule,
+  GroceryShopping,
+}
 
 class CreateFlatSection extends StatelessWidget {
   @override
@@ -14,17 +19,18 @@ class CreateFlatSection extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Create a Flat'),
       ),
-      body: CreateFlatProviderConsumer(builder: (context, provider) {
-        return ListView(
+      body: CFP(
+        builder: (context, child) => ListView(
           children: [
             SectionTitle('Create Flat Section'),
-            FlatName(provider),
-            SecretKey(provider),
-            PartyLength(provider),
-            WantedFeatures(provider),
+            FlatName(),
+            SecretKey(),
+            PartyLength(),
+            WantedFeatures(),
+            // Feature(Features.Chat, provider: provider),
           ],
-        );
-      }),
+        ),
+      ),
     );
   }
 }

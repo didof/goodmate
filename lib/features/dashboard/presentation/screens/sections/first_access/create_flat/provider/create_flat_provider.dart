@@ -1,7 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/field_types.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/entities.dart';
 
 Either<InvalidField, FlatNameType> generateRandomFlatName() {
   return right(FlatNameType(value: 'myRandomFlat'));
@@ -44,6 +43,7 @@ class CreateFlatProvider with ChangeNotifier {
   }
 
   setPartyLength(double number) {
+    print(number);
     partyLength = right(PartyLengthType(value: number));
     notifyListeners();
   }
@@ -64,17 +64,6 @@ class CreateFlatProvider with ChangeNotifier {
           return r.values;
         })
       ];
-}
-
-class InvalidField {
-  final String invalidValue;
-  final String shortMessage;
-  final String message;
-  InvalidField(
-    this.message, {
-    this.shortMessage = 'required',
-    this.invalidValue,
-  });
 }
 
 Either<InvalidField, FlatNameType> validateFlatName(String str) {
@@ -123,31 +112,4 @@ Either<InvalidField, WantedFeatureType> validateWantedFeatures(
   if (list.every((element) => element == false))
     return left(InvalidField('you must pick at least one feature'));
   return right(WantedFeatureType(values: list));
-}
-
-typedef AccessibleProvider = Widget Function(
-  BuildContext context,
-  CreateFlatProvider provider,
-);
-
-class CreateFlatProviderConsumer extends StatelessWidget {
-  final AccessibleProvider builder;
-  final Widget child;
-  CreateFlatProviderConsumer({
-    @required this.builder,
-    this.child,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => CreateFlatProvider(),
-      child: Builder(builder: (context) {
-        final provider =
-            Provider.of<CreateFlatProvider>(context, listen: false);
-        print('provider was built again');
-        return builder(context, provider);
-      }),
-    );
-  }
 }

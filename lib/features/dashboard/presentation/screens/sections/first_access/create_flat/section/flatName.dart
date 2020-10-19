@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/utils/show_modal.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/create_flat_provider.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/actioners.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/checkers.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/displayers.dart';
+import 'package:flutter_architecture_scaffold/core/utils/show_modal/with_single_text_field.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/actioners/flatName_actioner.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/checkers/flatName_checker.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/displayers/flatName_displayer.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/create_flat_provider.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/fieldTile.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/create_flat_provider_widgets.dart';
 
 class FlatName extends StatelessWidget {
-  final CreateFlatProvider provider;
-  FlatName(this.provider);
+  const FlatName();
 
   void _buildModal(
     BuildContext context,
-    CreateFlatProvider provider, {
+    CreateFlatProvider provider,
+    ThemeData theme, {
     String errorMessage,
   }) {
     showModalWithSingleTextField(
       context,
+      theme,
       labelText: 'Flat name',
       title: 'Pick a Name for the Flat',
       explanation: 'Choose a name that will identify your flat.',
@@ -26,19 +28,20 @@ class FlatName extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FieldTile(
-      label: 'flat name',
-      displayer: FlatNameDisplayer(),
-      checker: FlatnameChecker(
-        fixErrorFunction: (errMsg) => _buildModal(
-          context,
-          provider,
-          errorMessage: errMsg,
-        ),
-      ),
-      action: FlatNameActioner(
-        builder: (previousValue) => _buildModal(context, provider),
-      ),
+    return CFC(
+      builder: (context, provider, child, theme) {
+        return FieldTile(
+          label: 'flat name',
+          displayer: FlatNameDisplayer(),
+          checker: FlatnameChecker(
+            fixErrorFunction: (errMsg) =>
+                _buildModal(context, provider, theme, errorMessage: errMsg),
+          ),
+          action: FlatNameActioner(
+            action: (previousValue) => _buildModal(context, provider, theme),
+          ),
+        );
+      },
     );
   }
 }

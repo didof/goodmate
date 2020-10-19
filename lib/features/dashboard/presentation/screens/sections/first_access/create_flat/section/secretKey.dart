@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/utils/show_modal.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/create_flat_provider.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/actioners.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/checkers.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/displayers.dart';
+import 'package:flutter_architecture_scaffold/core/utils/show_modal/with_single_text_field.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/actioners/secretKey_actioner.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/checkers/secretKey_checker.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/displayers/secretKey_displayer.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/create_flat_provider.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/fieldTile/fieldTile.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/create_flat_provider_widgets.dart';
 
 class SecretKey extends StatelessWidget {
-  final CreateFlatProvider provider;
-  SecretKey(this.provider);
+  const SecretKey();
 
   void _buildModal(
     BuildContext context,
-    CreateFlatProvider provider, {
+    CreateFlatProvider provider,
+    ThemeData theme, {
     String errorMessage,
   }) {
     showModalWithSingleTextField(
       context,
+      theme,
       labelText: 'Secret Key',
       title: 'Decide who is allowed',
       explanation:
@@ -27,19 +29,24 @@ class SecretKey extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FieldTile(
-      label: 'secret key',
-      displayer: SecretKeyDisplayer(),
-      checker: SecretKeyChecker(
-        fixErrorFunction: (errMsg) => _buildModal(
-          context,
-          provider,
-          errorMessage: errMsg,
-        ),
-      ),
-      action: SecretKeyActioner(
-        builder: (previousValue) => _buildModal(context, provider),
-      ),
+    return CFC(
+      builder: (context, provider, child, theme) {
+        return FieldTile(
+          label: 'secret key',
+          displayer: SecretKeyDisplayer(provider, theme),
+          checker: SecretKeyChecker(
+            provider,
+            theme,
+            fixErrorFunction: (errMsg) =>
+                _buildModal(context, provider, theme, errorMessage: errMsg),
+          ),
+          action: SecretKeyActioner(
+            builder: (previousValue) => _buildModal(context, provider, theme),
+            provider: provider,
+            theme: theme,
+          ),
+        );
+      },
     );
   }
 }
