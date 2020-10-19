@@ -56,13 +56,13 @@ class CurrentUserInfoRepositoryImpl extends CurrentUserInfoRepositoryContract {
   }
 
   @override
-  Future<Either<Failure, void>> updateUser({
+  Future<Either<Failure, Null>> updateUser({
     @required String uid,
     @required String flatUid,
   }) async {
     try {
-      final response = await datasource.updateUser(uid, flatUid);
-      return right(response);
+      await datasource.updateUser(uid, flatUid);
+      return right(Null);
     } catch (e) {
       print(e);
       return left(UpdateUserFailure(

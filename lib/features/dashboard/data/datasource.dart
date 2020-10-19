@@ -36,10 +36,10 @@ class CurrentUserInfoDatasourceRemote
   }
 
   @override
-  Future<void> updateUser(String id, String flatUid) async {
+  Future<Null> updateUser(String id, String flatUid) async {
     final CollectionReference collectionReference =
         firebaseCloudInstance.collection(USERS);
-    return await collectionReference.doc(id).update({
+    await collectionReference.doc(id).update({
       'tenantIn': [flatUid],
     });
   }

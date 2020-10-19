@@ -6,12 +6,12 @@ import 'package:meta/meta.dart';
 import 'package:flutter_architecture_scaffold/core/entities/failures.dart';
 import 'package:flutter_architecture_scaffold/core/globals/usecases_contract.dart';
 
-class UseUpdateUser extends UseCase<DocumentReference, UpdateUserParams> {
+class UseUpdateUser extends UseCase<Null, UpdateUserParams> {
   final CurrentUserInfoRepositoryContract repository;
   UseUpdateUser({@required this.repository});
 
   @override
-  Future<Either<Failure, DocumentReference>> call(
+  Future<Either<Failure, Null>> call(
     UpdateUserParams params,
   ) async {
     return await repository.updateUser(

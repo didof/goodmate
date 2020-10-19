@@ -67,10 +67,7 @@ class CurrentUserInfoBloc
           await useCreateFlat(event.parameters);
       yield CloudWaiting(message: 'elaborating response ...');
       yield* documentReference.fold((l) async* {
-        yield CloudError(
-          code: 'create-flat-error',
-          message: 'something went wrong during the creation on the flat',
-        );
+        yield CloudError(code: l.code, message: l.message);
       }, (r) async* {
         yield CloudWaiting(message: 'updating your profile ...');
         await useUpdateUser(UpdateUserParams(
@@ -80,10 +77,6 @@ class CurrentUserInfoBloc
 
         yield CloudSuccessAndAlreadyTenantIn(documentReference: r);
       });
-
-      // TODO update user info tenantIn
-
-      // TODO yield CloudSuccessAndAlreadyTenantIn
     }
   }
 }

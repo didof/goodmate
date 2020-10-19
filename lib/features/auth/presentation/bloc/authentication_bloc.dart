@@ -69,6 +69,7 @@ class AuthenticationBloc
       });
     } else if (event is TriggerSignout) {
       final User user = await useSignOut();
+      print('current user $user');
       if (user == null) yield AuthenticationRedirectTo(AuthMethods.Signin);
     } else if (event is TriggerShiftToPage) {
       yield AuthenticationInitial(authMethod: event.authMethod);

@@ -15,7 +15,7 @@ abstract class CurrentUserInfoRepositoryContract {
   Future<Either<Failure, DocumentReference>> createFlat(
       {@required CreateFlatParameters parameters});
 
-  Future<Either<Failure, void>> updateUser({
+  Future<Either<Failure, Null>> updateUser({
     @required String uid,
     @required String flatUid,
   });
