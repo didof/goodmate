@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/providers/user_cloud_info.dart';
+import 'package:flutter_architecture_scaffold/core/providers/authenticated_user.dart';
 import 'package:flutter_architecture_scaffold/core/utils/bloc_dispatchers.dart';
 import 'package:flutter_architecture_scaffold/core/utils/show_snackbars.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/bloc/current_user_info_bloc.dart';
@@ -14,7 +14,7 @@ class DashboardBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CloudBlocConsumer(
+    return CurrentUserInfoConsumer(
       listener: (context, state) {
         if (state.runtimeType is CloudError) {
           showErrorSnackbarFromCloudErrorState(
@@ -61,13 +61,13 @@ class __ConnectingToCloudState extends State<_ConnectingToCloud> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      final String uid = Provider.of<UserCloudInfo>(context, listen: false).uid;
+      final String uid = Provider.of<AuthenticatedUser>(context, listen: false).uid;
       if (uid == null || uid.isEmpty) {
         throw UnimplementedError(
             '[DashobardScreen] this should never be thrown');
       }
-      dispatchCloudEvent(
-        context: context,
+      dispatchCurrentUserInfoEvent(
+        context,
         event: TriggerRetrieveUser(
           id: uid,
           localFirst: true,
@@ -98,7 +98,7 @@ class _Error extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String uid = Provider.of<UserCloudInfo>(context, listen: false).uid;
+    final String uid = Provider.of<AuthenticatedUser>(context, listen: false).uid;
     return Column(
       children: [
         Text('Something went orribly wrong.'),
@@ -106,8 +106,10 @@ class _Error extends StatelessWidget {
           child: Text(
             'Please, fix this.',
           ),
-          onPressed: () => dispatchCloudEvent(
-              context: context, event: TriggerRetrieveUser(id: uid)),
+          onPressed: () => dispatchCurrentUserInfoEvent(
+            context,
+            event: TriggerRetrieveUser(id: uid),
+          ),
         )
       ],
     );

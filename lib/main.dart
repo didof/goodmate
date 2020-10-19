@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_architecture_scaffold/core/providers/user_cloud_info.dart';
+import 'package:flutter_architecture_scaffold/core/providers/authenticated_user.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc_widgets.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/screens/authentication_screen.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/screen.dart';
@@ -25,7 +25,8 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider<UserCloudInfo>(create: (_) => UserCloudInfo()),
+        ChangeNotifierProvider<AuthenticatedUser>(
+            create: (_) => AuthenticatedUser()),
       ],
       builder: (context, child) {
         return AuthenticationBlocProvider(
@@ -41,7 +42,7 @@ class App extends StatelessWidget {
                 // when connected, if user is already authenticated send him forward
                 if (snapshot.connectionState == ConnectionState.active &&
                     snapshot.hasData) {
-                  Provider.of<UserCloudInfo>(context)
+                  Provider.of<AuthenticatedUser>(context)
                       .updateUserCloudInfo(snapshot.data);
                   return DashboardScreen();
                 }
@@ -57,7 +58,7 @@ class App extends StatelessWidget {
   }
 }
 
-/// TODO when mind fresh
+/// TODO create CustomMaterialApp
 /// create in [CustomMaterialApp] a field providers that only takes the labels
 // class BlocProviders {
 //   final List<String> list;

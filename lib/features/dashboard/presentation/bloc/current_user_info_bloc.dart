@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/entities/create_flat_parameters.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/domain/usecases/use_retrieve_user_from_memory.dart';
 import 'package:meta/meta.dart';
 
@@ -54,6 +55,9 @@ class CurrentUserInfoBloc
           }
         },
       );
+    } else if (event is TriggerCreateFlat) {
+      yield CloudWaiting(message: 'sending request to Cloud');
+      // TODO implement create flat
     }
   }
 }

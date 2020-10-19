@@ -2,12 +2,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_architecture_scaffold/core/globals/extensions.dart';
 
-class UserCloudInfo with ChangeNotifier {
+class AuthenticatedUser with ChangeNotifier {
   String uid;
   String email;
   String displayName;
   String theme;
-  UserCloudInfo({
+  AuthenticatedUser({
     this.uid,
     this.email,
     this.displayName,

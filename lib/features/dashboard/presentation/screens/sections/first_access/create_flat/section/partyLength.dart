@@ -25,7 +25,6 @@ class PartyLength extends StatelessWidget {
           displayer: PartyLengthDisplayer(provider, theme),
           checker: PartyLengthChecker(provider, theme,
               moreInfoFunction: _buildModal),
-          //TODO implement action
           action: PartyLengthActioner(provider, theme, action: () {}),
         );
       },

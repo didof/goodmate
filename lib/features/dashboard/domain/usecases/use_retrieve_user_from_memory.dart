@@ -1,5 +1,5 @@
 import 'package:dartz/dartz.dart';
-import 'package:flutter_architecture_scaffold/features/dashboard/domain/current_user_info.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/domain/entities/current_user_info.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/domain/repository_contract.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_architecture_scaffold/core/entities/failures.dart';

@@ -75,6 +75,22 @@ class CreateFlatProvider with ChangeNotifier {
   List<Either<InvalidField, FieldType>> get props =>
       [flatName, secretKey, partyLength, wantedFeatures];
 
+  dynamic getRight(Either<InvalidField, FieldType> either) {
+    return either.fold(
+      (l) => throw UnimplementedError('this should not occur'),
+      (r) => r.value,
+    );
+  }
+
+  Map<String, dynamic> get validatedValues {
+    return {
+      'flatName': getRight(flatName),
+      'secretKey': getRight(secretKey),
+      'partyLength': getRight(partyLength).toString(),
+      'wantedFeatures': getRight(wantedFeatures),
+    };
+  }
+
   List<bool> get wantedFeaturesList => [
         ...wantedFeatures.fold(
           (_) => List.generate(3, (_) => false),

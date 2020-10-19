@@ -18,7 +18,7 @@ class DashboardScreen extends StatelessWidget {
           replaceTo(context,
               screen: AuthenticationScreen(authMethod: state.authMethod));
       },
-      child: CloudBlocProvider(
+      child: CurrentUserInfoProvider(
         child: Scaffold(
           appBar: AppBar(title: const Text('Dashboard')),
           drawer: DashboardDrawer(),

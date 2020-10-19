@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/entities.dart';
+import 'package:flutter_architecture_scaffold/core/globals/extensions.dart';
 
 Either<InvalidField, FlatNameType> validateFlatName(String str) {
   if (str == null || str.isEmpty)
@@ -18,7 +19,7 @@ Either<InvalidField, FlatNameType> validateFlatName(String str) {
       'The name must be less than 20 characters',
       invalidValue: str,
     ));
-  return right(FlatNameType(value: str));
+  return right(FlatNameType(value: str.capitalizeFirstLetter()));
 }
 
 Either<InvalidField, SecretKeyType> validateSecretKey(String str) {

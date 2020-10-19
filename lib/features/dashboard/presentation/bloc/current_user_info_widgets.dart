@@ -13,12 +13,11 @@ typedef StateBuilder = Widget Function(
   CurrentUserInfoState state,
 );
 
-class CloudBlocProvider extends StatelessWidget {
+class CurrentUserInfoProvider extends StatelessWidget {
   final Widget child;
-  const CloudBlocProvider({
-    Key key,
+  const CurrentUserInfoProvider({
     @required this.child,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,11 +28,26 @@ class CloudBlocProvider extends StatelessWidget {
   }
 }
 
-class CloudBlocConsumer extends StatelessWidget {
+class CurrentUserInfoProviderValue extends StatelessWidget {
+  final Widget child;
+  const CurrentUserInfoProviderValue({
+    @required this.child,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider.value(
+      value: sl<CurrentUserInfoBloc>(),
+      child: child,
+    );
+  }
+}
+
+class CurrentUserInfoConsumer extends StatelessWidget {
   final StateListener listenerForwarder;
   final StateBuilder builderForwarder;
   final Widget child;
-  const CloudBlocConsumer({
+  const CurrentUserInfoConsumer({
     Key key,
     StateListener listener,
     StateBuilder builder,

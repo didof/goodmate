@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_architecture_scaffold/features/dashboard/presentation/bloc/current_user_info_widgets.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/provider/create_flat_provider_widgets.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/section/flatName.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/first_access/create_flat/section/partyLength.dart';
@@ -16,23 +17,26 @@ enum Features {
 class CreateFlatSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return CFP(builder: (context, child) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text('Create a Flat'),
-        ),
-        body: ListView(
-          children: [
-            SectionTitle('Create Flat Section'),
-            FlatName(),
-            SecretKey(),
-            PartyLength(),
-            WantedFeatures(),
-          ],
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: CreateFlatFAB(),
-      );
-    });
+    return CurrentUserInfoProviderValue(
+      child: CFP(builder: (context, child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text('Create a Flat'),
+          ),
+          body: ListView(
+            children: [
+              SectionTitle('Create Flat Section'),
+              FlatName(),
+              SecretKey(),
+              PartyLength(),
+              WantedFeatures(),
+            ],
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerFloat,
+          floatingActionButton: CreateFlatFAB(),
+        );
+      }),
+    );
   }
 }

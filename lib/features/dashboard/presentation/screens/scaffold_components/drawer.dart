@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_architecture_scaffold/core/utils/bloc_dispatchers.dart';
-import 'package:flutter_architecture_scaffold/core/providers/user_cloud_info.dart';
+import 'package:flutter_architecture_scaffold/core/providers/authenticated_user.dart';
 import 'package:flutter_architecture_scaffold/core/utils/navigator_methods.dart';
 import 'package:flutter_architecture_scaffold/features/auth/presentation/bloc/authentication_bloc.dart';
 import 'package:flutter_architecture_scaffold/features/dashboard/presentation/screens/sections/profile_section/profile_section.dart';
@@ -21,7 +21,8 @@ class DashboardDrawer extends StatelessWidget {
       child: ListView(
         children: [
           AppBar(
-            title: Consumer<UserCloudInfo>(builder: (context, value, child) {
+            title:
+                Consumer<AuthenticatedUser>(builder: (context, value, child) {
               return Text(value.displayName ?? value.email);
             }),
             automaticallyImplyLeading: false,

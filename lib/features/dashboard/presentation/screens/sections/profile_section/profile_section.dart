@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_architecture_scaffold/core/providers/user_cloud_info.dart';
+import 'package:flutter_architecture_scaffold/core/providers/authenticated_user.dart';
 import 'package:provider/provider.dart';
 
 class ProfileSection extends StatelessWidget {
@@ -26,7 +26,7 @@ class ProfileSection extends StatelessWidget {
                   ListTile(
                     leading: const CircleAvatar(child: const Icon(Icons.face)),
                     title: const Text('display name'),
-                    subtitle: Consumer<UserCloudInfo>(
+                    subtitle: Consumer<AuthenticatedUser>(
                       builder: (context, value, child) {
                         return Text(value.displayName);
                       },
@@ -38,7 +38,7 @@ class ProfileSection extends StatelessWidget {
                     leading: const CircleAvatar(
                         child: const Icon(Icons.alternate_email)),
                     title: const Text('e-mail address'),
-                    subtitle: Consumer<UserCloudInfo>(
+                    subtitle: Consumer<AuthenticatedUser>(
                       builder: (context, value, child) {
                         return Text(
                           value.email,
@@ -68,7 +68,7 @@ class ProfileSection extends StatelessWidget {
                     leading:
                         const CircleAvatar(child: const Icon(Icons.color_lens)),
                     title: const Text('Theme'),
-                    subtitle: Consumer<UserCloudInfo>(
+                    subtitle: Consumer<AuthenticatedUser>(
                       builder: (context, value, child) {
                         return Text(value.theme);
                       },
